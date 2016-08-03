@@ -29,3 +29,4 @@
 # Data (to be commented out when the release is made) #
 #######################################################
 /Data
+*.html

@@ -246,6 +246,15 @@ summary2plot <- ggplot(norm_data, aes(simple_id, OD)) +
   scale_y_log10()
 summary2plot #OD by simple groupings
 
+summary2plot <- ggplot(norm_data, aes(simple_id, OD)) +
+  scale_shape_manual(values = c(1,16,7)) +
+  scale_colour_brewer(palette = "YlOrRd") +
+  geom_boxplot(outlier.shape=NA) +
+  geom_point(aes(shape = coating, colour = dilution), size = 3, position = "jitter") +
+  theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
+  scale_y_log10()
+summary2plot #OD by simple groupings, colored by dilution
+
 #'
 #' since there is some variability ove rtime with the absolute OD of the values (also because I am including FBS and non FBS treated wells)
 #' I will be using the normalized values for all analyses.
@@ -409,3 +418,10 @@ norm_data[, shapiro.test(.SD$OD_adjusted)$p.value, by = simple_id]
 #+ homogeneity-of-variances
 bartlett.test(OD_adjusted ~ simple_id, data=norm_data) # Bartlett Test of Homogeneity of Variances (parametric)
 fligner.test(OD_adjusted ~ simple_id, data=norm_data) # Figner-Killeen Test of Homogeneity of Variances (nonparamatric)
+
+#' #Output
+#' 
+#' save the outputs into the Data folder for visualization and stats
+
+#+ save
+save(norm_data, file="Data/crystal_violet_biofilm.RData")

@@ -256,7 +256,8 @@ summary2plot <- ggplot(norm_data, aes(simple_id, OD)) +
 summary2plot #OD by simple groupings, colored by dilution
 
 #'
-#' since there is some variability ove rtime with the absolute OD of the values (also because I am including FBS and non FBS treated wells)
+#' since there is some variability over time with the absolute OD of the values 
+#' (also because I am including FBS and non FBS treated wells, and since I can't tell what the dilution factor plays into this)
 #' I will be using the normalized values for all analyses.
 #'
 #+ da-plot-final, message=FALSE, fig.width=12, fig.height=10

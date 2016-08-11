@@ -74,18 +74,6 @@ logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_l
   } #make it
   return(p)
 }
-effect_size_plot <- function(orddom_table) {
-  cliffd_plot <- ggplot(orddom_table, aes(delta, comparison)) +
-    geom_vline(xintercept =  0, linetype = 2, alpha = 0.5) +
-    geom_point() +
-    geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
-                                     xmax = CI.high)) +
-    labs(x = "Cliff's Delta", y = "Comparison") +
-    coord_cartesian(xlim = c(-1, 1)) +
-    facet_grid(.~timepoint) +
-    theme_mod
-  return(cliffd_plot)
-}
 
 #+ style, inlcude=FALSE
 theme_mod <- theme_bw() +
@@ -108,14 +96,14 @@ original_par <- par() #for resetting to original par after generating the plot i
 
 #+ load-data
 load("Data/crystal_violet_biofilm.RData")
-norm_data <- norm_data[simple_id %in% c("wt_NA", "agrA_", "atl_", "icaA_", "srtA_", "agrA_pos1_agrA_20", "agrA_pos1_empty")]
+norm_data <- norm_data[simple_id %in% c("wt_NA", "agrA_", "atl_", "icaA_", "srtA_", "agrA_pos1_agrA_20", "agrA_pos1_empty")] #filter
 
 #' 
 #' #Initial Visualize
 #' 
 
 #+ dirty-visualze
-#+ effect-size
+#+ data-summary
 data_summary <- norm_data %>%
   group_by(simple_id) %>%
   summarise(
@@ -125,7 +113,7 @@ data_summary <- norm_data %>%
     ci_upper = t.test(OD_adjusted)$conf.int[2])
 data_summary
 
-#+ effect-size-plot, message=FALSE, fig.width=12, fig.height=10
+#+ summary-plot, message=FALSE, fig.width=12, fig.height=10
 pos = position_dodge(width = 0.9)#for error bars to dodge dodging columns
 data_summary_plot <- ggplot(data_summary, aes(simple_id, mean, ymin = ci_lower, ymax = ci_upper)) +
   geom_bar(aes(fill = simple_id), stat="identity", position = pos, width = 0.9) +
@@ -134,7 +122,7 @@ data_summary_plot <- ggplot(data_summary, aes(simple_id, mean, ymin = ci_lower, 
 data_summary_plot
 
 #' 
-#' ##Set values
+#' #Set values
 #'
 #' These variables affect the coming scripts.
 #' blocking_factor is the column (data frame variable) in which all experimental conditions are tested in
@@ -147,14 +135,15 @@ alpha_level <- 0.05
 blocking_factor <- "drop" #this is not a blocking factor, it includes all data
 test_factor1 <- "simple_id"
 set_data <- transformed_data[[2]]
-set_test <- "ordinal" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D 
+set_test <- "ordinal" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
 
 #' 
-#' ##Effect Size
+#' #Effect Size
 #'
 #' Effect size is calculated and plotted
 #'
 
+#+ calculate
 orddom_cols <- c("comparison", "timepoint", "Var2", "1-alpha", "A X>Y", "A Y>X", "CI high", 
                  "CI low", "Cohen's d", "d CI high", "d CI low", "delta", "df", "H1 tails p/CI", 
                  "N #Y<X", "N #Y=X", "N #Y>X", "n in X", "n in Y", "NNT", "p", "PS X>Y", "PS Y>X", 
@@ -188,230 +177,75 @@ orddom_summary <- norm_data %>%
   as.data.frame() %>%
   filter(Var2 == set_test)
 
-#+ orddom-effect-size
-orddom_cols <- c("comparison", "timepoint", "Var2", "1-alpha", "A X>Y", "A Y>X", "CI high", 
-                 "CI low", "Cohen's d", "d CI high", "d CI low", "delta", "df", "H1 tails p/CI", 
-                 "N #Y<X", "N #Y=X", "N #Y>X", "n in X", "n in Y", "NNT", "p", "PS X>Y", "PS Y>X", 
-                 "s delta", "se delta", "type_title", "var d.i", "var delta", "var dij", "var dj.", 
-                 "var1_X", "var2_Y", "z/t score") #column names for orddom ouput
-orddom <- pairwise_data_table %>%
-  at_depth(1, ~ orddom(.x$cfu1, .x$cfu2)) %>%
-  at_depth(1, melt) %>% #manipulate to data frame
-  at_depth(0, ~ bind_rows(.x, .id = "comparison")) %>% #bind the data frames together by row
-  dcast(comparison + Var2 ~ Var1) %>% #merge intp final data frame
-  map_at(orddom_cols[c(-1, -2, -3, -26,-31, -32)], as.numeric) #convert to numeric data
-#make it back into a dataframe and filter to keep only ordinal information
-orddom_ordinal <- as.data.frame(orddom) %>%
-  filter(Var2 == "ordinal")
-#make it back into a dataframe and filter to keep only metric information
-orddom_metric <- as.data.frame(orddom) %>%
-  filter(Var2 == "metric")
+#+ comparisons-label
+l1 <- expression(atop(paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA), " vs."), paste(italic(agrA[C123F]), " + pOS1 empty")))
+l2 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 empty")))
+l3 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA))))
+l4 <- expression(atop("wild-type vs. ", paste("srtA", ":", ":", "erm")))
+l5 <- expression(atop("wild-type vs. ", paste("icaA", ":", ":", "erm")))
+l6 <- expression(atop("wild-type vs. ", italic(Delta*atl)))
+l7 <- expression(atop("wild-type vs. ", italic(agrA[C123F])))
 
-#+ save-KO_subsets, results="hide"
-save(KO_subset, file = "KO_subset.RData") #the subsetted norm data
-save(data_summary, file = "KO_subset_summary.RData") #the mean, sdev and t.test computed CI
-save(orddom_ordinal, file = "KO_subset_cliffsd.RData") #cliff's d: effectsizes
-save(orddom_metric, file = "KO_subset_metric.RData") #metric effectsizes
-
-#+ plot-ordinal-effsize
-ordinal_effsize <- ggplot(orddom_ordinal, aes(delta, comparison)) +
+#+ filtered-plot
+orddom_sliced <- slice(orddom_summary, c(1,16:21)) #filter
+effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
+  geom_vline(xintercept =  0, linetype = 2, alpha = 0.5) +
   geom_point() +
   geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
-                                   xmax = CI.high))
-ordinal_effsize
+                                   xmax = CI.high)) +
+  labs(x = expression(paste("Cliff's ", Delta)), y = "Comparison") +
+  scale_y_discrete(labels = c(l7, l6, l5, l4, l3, l2, l1)) +
+  coord_cartesian(xlim = c(-1, 1)) +
+#  facet_grid(.~timepoint) +
+#  facet_grid(reformulate(".", facet_type)) +
+  theme_mod
+effsize_plot #plot
 
-#+ plot-metric-effsize
-metric_effsize <- ggplot(orddom_metric, aes(delta, comparison)) +
-  geom_point() +
-  geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
-                                   xmax = CI.high))
-metric_effsize
-
-#' ##NHST
+#' #NHST
 #' 
 #' null hypothesis: the cfu from mutants are not different
+#' since the fomer analysis was done with the non-parametric cliff's delta we are using the kruskall-wallis with dunn's post hoc here
 #' 
-#+ ANOVA-new
-anova_fit <- lmer(OD_adjusted ~ simple_id*coating + (1|date), data = KO_subset, REML = TRUE) #making the mixed effects model 2 factors one random error
-
-#+ ANOVA-new-stats
-#some difficulty getting all of the plots into one window...
-plot(anova_fit, type = c("p","smooth")) #fitted v residual
-plot(anova_fit, sqrt(abs(resid(.)))~fitted(.), type = c("p","smooth")) #scale location
-qqnorm(resid(anova_fit))
-qqline(resid(anova_fit)) #qq
-anova(anova_fit) #test if the factors make a difference
-#'both timepoint and sample_id have a significant effect on cfu_log
-
-#+ model-based-effect-sizes
-effect_size <- difflsmeans(anova_fit, test.effs = "simple_id")
-names(effect_size$diffs.lsmeans.table)[c(5,6)] <-c("Lower.CI", "Upper.CI") #remove the spaces from the names
-effect_size_plot <- ggplot(effect_size$diffs.lsmeans.table, aes(Estimate, dimnames(effect_size$diffs.lsmeans.table)[[1]])) +
-  geom_point() +
-  geom_errorbarh(height = 0.2, aes(xmin = Lower.CI, xmax = Upper.CI))
-effect_size_plot
-
-#+ Tukey-test
-posthoc <- glht(anova_fit, linfct = mcp(simple_id = "Tukey"))
-tukey_anova_fit <- summary(posthoc, test = adjusted("single-step"))
-tukey_anova_fit
 
 #non parametric tests
 #+ Kruskall-Wallis
-kruskal.test(OD_adjusted ~ simple_id, data = KO_subset) #Kruskall-Wallis test for a group with stochastic dominance
+kruskal.test(OD_adjusted ~ simple_id, data = norm_data) #Kruskall-Wallis test for a group with stochastic dominance
 
 #+ Post-hoc-pairwise, message=FALSE
-wilcox_tests <- pairwise.wilcox.test(KO_subset$OD_adjusted, KO_subset$simple_id, p.adjust.method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Wilcoxon distrubution
-wilcox_tests #print wilcox tests
-dunns_test <- dunn.test(KO_subset$OD_adjusted, KO_subset$simple_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 10, 3, dimnames = list(dunns_test$comparisons, c("Z", "p-value", "p-adjusted")))
+dunns_test <- dunn.test(norm_data$OD_adjusted, norm_data$simple_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
+sig_matrix <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 21, 3, dimnames = list(dunns_test$comparisons, c("Z", "p-value", "p-adjusted")))
+sig_matrix
 
-#' #Complemented mutants: agrA
+#'
+#' #Main figure
 #' 
-#+ subset-data-agrA, results="hide"
-agr_subset_index <- unique(norm_data[simple_id == "agrA_pos1_empty" | simple_id == "agrA_pos1_agrA_20", .(date, plate)])
-agr_subset <- norm_data[agr_subset_index][simple_id == "agrA_pos1_empty" | simple_id == "agrA_pos1_agrA_20" | simple_id == "wt_NA"]
-agr_subset$simple_id <- droplevels(agr_subset$simple_id)
-OD_aggregate <- aggregate(cbind(OD, OD_adjusted, OD_log, OD_scale) ~ simple_id,
-                          data = agr_subset,
-                          print) #the OD for each pariwise combinations, also required for Cliff's DELTA
-xselect <- combn(OD_aggregate[["simple_id"]], 2)
-names(OD_aggregate$OD_adjusted) <- OD_aggregate$simple_id
+#' Labels
+#'
 
-#+ effect-size-agr
-#rewrite effect size in data.table
-data_summary <- agr_subset[simple_id != "wt_NA", summarise(.SD,
-                                                          mean = mean(OD_adjusted),
-                                                          sdev = sd(OD_adjusted),
-                                                          ci_lower = t.test(OD_adjusted)$conf.int[1],
-                                                          ci_upper = t.test(OD_adjusted)$conf.int[2]), by = .(simple_id)]
-data_summary <- rbindlist(list(data_summary, 
-                               agr_subset[simple_id == "wt_NA", summarise(.SD, mean = mean(OD_adjusted),
-                                                                         sdev = sd(OD_adjusted)), by = .(simple_id)]),
-                          fill = TRUE)
+#+ labels
+l1 <- "wild type"
+l2 <- expression(italic(agrA[C123F]))
+l3 <- expression(italic(Delta*atl))
+l4 <- expression(italic(paste("icaA", ":", ":", "erm")))
+l5 <- expression(italic(paste("srt", ":", ":", "erm")))
+l6 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
+l7 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
+annotate_grid <- data.frame(x = 1:4, y = 1:4) #for the overlay later to allow for drawing stats comparison paths
+norm_data$simple_id <- factor(norm_data$simple_id, c("wt_NA", "srtA_", "icaA_", "atl_", "agrA_", "agrA_pos1_agrA_20", "agrA_pos1_empty")) #reorder factor
 
-#+ effect-size-plot3, ref.label="effect-size-plot"
-
-#+foda-se-amazing, message=FALSE
-#HARDCODED someday you might want to make this nicer, I think it's close to being general
-pairwise_data_table <- data.frame(pair = I(list(cfu1 = 1, cfu2 = 2)),
-                                  pair = I(list(cfu1 = 1, cfu2 = 2)),
-                                  pair = I(list(cfu1 = 1, cfu2 = 2)))
-#make the empty datatable you want
-
-#edited to remove the subframes
-fetch <- function(x){
-  names_list <- c()
-  for (i in 1:ncol(xselect)){
-    index <- as.character(xselect[,i])
-    names_list <- c(names_list, paste(index[1], index[2], sep ="-"))
-    pairwise_data_table[[i]][[1]] <- x[[index[1]]]
-    pairwise_data_table[[i]][[2]] <- x[[index[2]]]
-  }
-  colnames(pairwise_data_table) <- names_list
-  return(pairwise_data_table)
-}
-
-#populate the list
-z <- OD_aggregate[["OD_adjusted"]]
-pairwise_data_table <- fetch(z)
-str(pairwise_data_table)
-######foda-se
-
-#+ orddom-effect-size2, ref.label="orddom-effect-size"
-
-#+ plot-ordinal-effsize2, ref.label="plot-ordinal-effsize"
-
-#+ plot-metric-effsize2, ref.label="plot-metric-effsize"
-
-#+ save-agr_subsets, results="hide"
-save(agr_subset, file = "agr_subset.RData") #the subsetted norm data
-save(data_summary, file = "agr_subset_summary.RData") #the mean, sdev and t.test computed CI
-save(orddom_ordinal, file = "agr_subset_cliffsd.RData") #cliff's d and effectsizes
-save(orddom_metric, file = "agr_subset_metric.RData") #metric effectsizes
-
-#' ##NHST
-#' 
-#' null hypothesis: the cfu from mutants are not different
-#' 
-#+ ANOVA-new2
-anova_fit <- lmer(OD_adjusted ~ simple_id*coating + (1|date), data = agr_subset, REML = TRUE) #making the mixed effects model 2 factors one random error
-
-#+ ANOVA-new-stats2, ref.label="ANOVA-new-stats"
-
-#+ model-based-effect-sizes2, ref.label="model-based-effect-sizes"
-
-#+ Tukey-test2, ref.label="Tukey-test"
-
-#non parametric tests
-#+ Kruskall-Wallis2
-kruskal.test(OD_adjusted ~ simple_id, data = agr_subset) #Kruskall-Wallis test for a group with stochastic dominance
-
-#+ Post-hoc-pairwise2, message=FALSE
-wilcox_tests <- pairwise.wilcox.test(agr_subset$OD_adjusted, agr_subset$simple_id, p.adjust.method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Wilcoxon distrubution
-wilcox_tests #print wilcox tests
-dunns_test <- dunn.test(agr_subset$OD_adjusted, agr_subset$simple_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 3, 3, dimnames = list(dunns_test$comparisons, c("Z", "p-value", "p-adjusted")))
-
-#' #Complemented mutants: atl
-#' 
-#+ subset-data-atl, results="hide"
-atl_subset_index <- unique(norm_data[simple_id == "atl_pos1_empty" | simple_id == "atlA_pos1_atl", .(date, plate)])
-atl_subset <- norm_data[agr_subset_index][simple_id == "atl_pos1_empty" | simple_id == "atl_pos1_atl" | simple_id == "wt_NA"]
-atl_subset$simple_id <- droplevels(atl_subset$simple_id)
-OD_aggregate <- aggregate(cbind(OD, OD_adjusted, OD_log, OD_scale) ~ simple_id,
-                          data = atl_subset,
-                          print) #the OD for each pariwise combinations, also required for Cliff's DELTA
-xselect <- combn(OD_aggregate[["simple_id"]], 2)
-names(OD_aggregate$OD_adjusted) <- OD_aggregate$simple_id
-
-#+ effect-size-atl
-#rewrite effect size in data.table
-data_summary <- atl_subset[simple_id != "wt_NA", summarise(.SD,
-                                                           mean = mean(OD_adjusted),
-                                                           sdev = sd(OD_adjusted),
-                                                           ci_lower = t.test(OD_adjusted)$conf.int[1],
-                                                           ci_upper = t.test(OD_adjusted)$conf.int[2]), by = .(simple_id)]
-data_summary <- rbindlist(list(data_summary, 
-                               atl_subset[simple_id == "wt_NA", summarise(.SD, mean = mean(OD_adjusted),
-                                                                          sdev = sd(OD_adjusted)), by = .(simple_id)]),
-                          fill = TRUE)
-
-#+ effect-size-plot4, ref.label="effect-size-plot"
-
-#+foda-se-amazing2, ref.label="foda-se-amazing"
-
-#+ orddom-effect-size3, ref.label="orddom-effect-size"
-
-#+ save-atl_subsets, results="hide"
-save(atl_subset, file = "atl_subset.RData") #the subsetted norm data
-save(data_summary, file = "atl_subset_summary.RData") #the mean, sdev and t.test computed CI
-save(orddom_ordinal, file = "atl_subset_cliffsd.RData") #cliff's d and effectsizes
-save(orddom_metric, file = "atl_subset_metric.RData") #metric effectsizes
-
-#+ plot-ordinal-effsize3, ref.label="plot-ordinal-effsize"
-
-#+ plot-metric-effsize3, ref.label="plot-metric-effsize"
-
-#' ##NHST
-#' 
-#' null hypothesis: the cfu from mutants are not different
-#' 
-#+ ANOVA-new3
-anova_fit <- lmer(OD_adjusted ~ simple_id*coating + (1|date), data = atl_subset, REML = TRUE) #making the mixed effects model 2 factors one random error
-
-#+ ANOVA-new-stats3, ref.label="ANOVA-new-stats"
-
-#+ model-based-effect-sizes3, ref.label="model-based-effect-sizes"
-
-#+ Tukey-test3, ref.label="Tukey-test"
-
-#non parametric tests
-#+ Kruskall-Wallis3
-kruskal.test(OD_adjusted ~ simple_id, data = atl_subset) #Kruskall-Wallis test for a group with stochastic dominance
-
-#+ Post-hoc-pairwise3, message=FALSE
-wilcox_tests <- pairwise.wilcox.test(atl_subset$OD_adjusted, atl_subset$simple_id, p.adjust.method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Wilcoxon distrubution
-wilcox_tests #print wilcox tests
-dunns_test <- dunn.test(atl_subset$OD_adjusted, atl_subset$simple_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 3, 3, dimnames = list(dunns_test$comparisons, c("Z", "p-value", "p-adjusted")))
+#+ overview-plot, fig.width=7, fig.height=7
+main_fig <- ggplot(norm_data, aes(simple_id, OD_adjusted)) +
+  geom_boxplot(outlier.shape = NA, width = 0.5, alpha = 0.5) +
+  geom_point(position = position_jitter(width = 0.25), size = 0.3) +
+#  scale_x_discrete(labels = c(label5, label4, label3, label2, label1)) +
+  labs(x = " ", y = expression(normalized~OD[595])) +
+  theme_mod + 
+  geom_path(aes(x=c(1,1,4.9,4.9),y=c(7.8,8,8,8)), data = annotate_grid) +
+  annotate("text",x=3,y=8.2,label="p==1.51%*%10^{-11}", parse = TRUE) +
+  geom_path(aes(x=c(1,1,2,2),y=c(5,5.2,5.2,5)), data = annotate_grid) +
+  annotate("text",x=2.5,y=7.4,label="p==1.56%*%10^{-4}", parse = TRUE) +
+  geom_path(aes(x=c(1,1,3,3),y=c(6,6.2,6.2,6)), data = annotate_grid) +
+  annotate("text",x=2,y=6.4,label="p=1.00") +
+  geom_path(aes(x=c(1,1,4,4),y=c(7,7.2,7.2,7)), data = annotate_grid) +
+  annotate("text",x=1.5,y=5.4,label="p==1.85%*%10^{-1}", parse = TRUE)# data and overlay layer
+main_fig

@@ -25,6 +25,7 @@
 *.log
 *.sql
 *.sqlite
+.Rhistory
 
 # Data (to be commented out when the release is made) #
 #######################################################

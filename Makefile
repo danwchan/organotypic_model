@@ -1,0 +1,69 @@
+#this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
+analysis_html_documentation:
+
+160531_remake_figures.html:
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160601_remake_old_graphs/160531_remake_figures.R', knit = FALSE))"
+
+160530_raft_figures.html:
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160530_organotypic_collated/160530_raft_figures.R', knit = FALSE))"
+
+160528_cvbiofilm_figures.html:
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160528_cv_merge/160528_cvbiofilm_figures.R', knit = FALSE))"
+
+#these were made later with moe understanding
+22251_effsize.pdf:
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160606_clinical_strain_panel/160608_22251_effsize.R', knit = FALSE))"
+
+22251_agrA_comp.pdf:
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160606_clinical_strain_panel/160608_22251_agrA_comp.R', knit = FALSE))"
+
+#export svg inkscape files as pdfs for latex import
+allfigs: mainfigs suppfigs
+
+mainfigs: fig1_characterize_model.pdf fig2_SEM.pdf fig3_growth.pdf fig4_biofilm.pdf
+
+suppfigs: figS1_experimental_setup.pdf figS2_sonicated.pdf figS3_22251.pdf figS4_newman.pdf figS5_PBS.pdf
+
+lucifer_yellow.pdf:
+	inkscape "./Figures/lucifer_yellow_final_pics/lucifer_yellow.svg" -A "./Figures/lucifer_yellow.pdf"
+
+#the IF images are a blackspot on my ability to keep good records of my process... the original images are unclear and I am (at the moment) unwilling to dive through and find them, and also rederive the exact manipulations to the image
+fig1_characterize_model.pdf: lucifer_yellow.pdf
+	inkscape "./Figures/Fig1_forpub_model.svg" -A "./Figures/fig1_characterize_model.pdf"
+
+fig2_SEM.pdf: 
+	inkscape "./Figures/Fig2_forpub_SEM.svg" -A "./Figures/fig2_SEM.pdf"
+
+fig3_growth.pdf:
+	inkscape "./Figures/Fig3_forpub_mutant_growth.svg" -A "./Figures/fig3_mutant_growth.pdf"
+
+fig4_biofilm.pdf:
+	inkscape "./Figures/Fig4_forpub_biofilm.svg" -A "./Figures/fig4_biofilm.pdf"
+
+figS1_experimental_setup.pdf:
+	inkscape "./Figures/figS1_experimental_setup.svg" -A "./Figures/figS1_experimental_setup.pdf"
+
+figS2_effsize.pdf:
+	inkscape "./Figures/figS2_effsize.svg" -A "./Figures/figS2_effsize.pdf"
+
+figS2_sonicated.pdf:
+	inkscape "./Figures/figS3_sonicated.svg" -A "./Figures/figS2_sonicated.pdf"
+
+figS3_22251.pdf:
+	inkscape "./Figures/Fig4_forpub_22251.svg" -A "./Figures/figS3_22251.pdf"
+
+figS4_newman.pdf:
+	inkscape "./Figures/figS4_newman.svg" -A "./Figures/figS4_newman.pdf"
+
+figS5_PBS.pdf:
+	inkscape "./Figures/figS5_PBS.svg" -A "./Figures/figS5_PBS.pdf"
+
+#having some trouble here... when the lesson is learned...
+figures_proofing.pdf: allfigs
+	cd "./Figures"
+	pdflatex "./Figures/figures_proofing.tex"
+
+#make references for pasting into plos latex template since they don't support .bib file submission
+make_ref_plos:
+	latex first_draft.tex
+	bibtex first_draft.aux

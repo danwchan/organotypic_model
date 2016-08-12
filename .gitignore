@@ -25,7 +25,11 @@
 *.log
 *.sql
 *.sqlite
+
+# Hidden and temporary files #
+##############################
 .Rhistory
+.Makefile*
 
 # Data (to be commented out when the release is made) #
 #######################################################

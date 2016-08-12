@@ -1,8 +1,8 @@
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
 analysis_html_documentation:
 
-160531_remake_figures.html:
-	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160601_remake_old_graphs/160531_remake_figures.R', knit = FALSE))"
+crystal_violet_stats_vis.html:
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')"
 
 160530_raft_figures.html:
 	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160530_organotypic_collated/160530_raft_figures.R', knit = FALSE))"
@@ -18,14 +18,22 @@ analysis_html_documentation:
 	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160606_clinical_strain_panel/160608_22251_agrA_comp.R', knit = FALSE))"
 
 #export svg inkscape files as pdfs for latex import
+# why am I exporting my figure as .tiff files then deleting them?:
+# because inkscape imports vector based things as a collection of objects that do not update dynamically in the inkscape file
+# since I want dynamiclly updating figures and I want high quality I must export graphs as
 allfigs: mainfigs suppfigs
 
 mainfigs: fig1_characterize_model.pdf fig2_SEM.pdf fig3_growth.pdf fig4_biofilm.pdf
 
 suppfigs: figS1_experimental_setup.pdf figS2_sonicated.pdf figS3_22251.pdf figS4_newman.pdf figS5_PBS.pdf
 
-lucifer_yellow.pdf:
-	inkscape "./Figures/lucifer_yellow_final_pics/lucifer_yellow.svg" -A "./Figures/lucifer_yellow.pdf"
+test.tiff:
+	Rscript "crystal_violet_stats_vis.R";
+	echo "$@ created, it is a large file..."
+
+test_fig1.pdf: test.tiff
+	inkscape "Figures/test_inkscape.svg" -A "Figures/for_publication/test_fig1.pdf";
+	rm "Figures/test.tiff"
 
 #the IF images are a blackspot on my ability to keep good records of my process... the original images are unclear and I am (at the moment) unwilling to dive through and find them, and also rederive the exact manipulations to the image
 fig1_characterize_model.pdf: lucifer_yellow.pdf

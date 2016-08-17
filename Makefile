@@ -1,15 +1,16 @@
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
 analysis_html_documentation: crystal_violet_stats_vis.html
 
-crystal_violet_stats_vis.html:
-	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')"
+crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm "crystal_violet_stats_vis.Rmd"
 
-160530_raft_figures.html:
-	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160530_organotypic_collated/160530_raft_figures.R', knit = FALSE))"
+Data/crystal_violet.RData: 
+	Rscript "crystal_violet_datawrangle.R";
 
-160528_cvbiofilm_figures.html:
-	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160528_cv_merge/160528_cvbiofilm_figures.R', knit = FALSE))"
+rafts_mutants_stats_vis.html:
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "crystal_violet_stats_vis.Rmd"
 
 #these were made later with moe understanding
 22251_effsize.pdf:

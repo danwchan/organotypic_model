@@ -1,5 +1,5 @@
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
-analysis_html_documentation:
+analysis_html_documentation: crystal_violet_stats_vis.html
 
 crystal_violet_stats_vis.html:
 	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')"

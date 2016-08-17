@@ -164,7 +164,7 @@ scatterplot <- ggplot(working_data, aes(sample_id, cfu)) +
   facet_grid(.~timepoint)
 scatterplot
 
-#+ for latr merging
+#+ for latr merging, eval=FALSE
 hla_tidy <- data.table(working_data)
 #column normalization
 hla_tidy[, Time := NULL][, ':=' (count = NA, dilution = NA, sample_strain = as.factor("LAC"), notes = NA)]

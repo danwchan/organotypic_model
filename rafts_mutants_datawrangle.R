@@ -79,11 +79,6 @@ original_par <- par() #for resetting to original par after generating the plot i
 raw_data <- read.csv('Data/160520_merged_KO.csv',comment.char = '#') #import the data from csv
 str(raw_data)
 
-#' ###Inital processing
-#' 
-#' the raw data is melted and reshaped standardizing the column names and entries (somewhat) to make it easier to work with
-#' 
-
 #+ process-data
 working_data <- raw_data %>%
   filter(notes == ''| notes == 'double' | notes == 'mix' | notes == 'double_infected') %>% #extract only certain notes
@@ -96,80 +91,11 @@ working_data <- raw_data %>%
   filter(cfu != 'NA') #remove NA's
 str(working_data)
 
-#' 
-#' the data is now flagged and the types are changed to work better with downstream exploration and visulaization
-#' 
-
-#+ process-data
-working_data <- cast_data %>%
-  transform(date = as.factor(date),
-            plate = as.factor(plate),
-            coating = as.factor(coating),
-            OD = as.numeric(OD)) %>% #convert date, plate to a factor and OD into numeric, merge the mutants together
-  filter(sample_strain == 'LAC' | sample_strain == "empty",
-         media == "TSB" | media == "0.5_glu",
-         O2 == "aerobic") %>% #extract only the data for which there will be comparative rafts, also exclude media comparisons
-  mutate(row = as.factor(ifelse(grepl("[a-g][0-9]{1,2}", as.character(well)) == TRUE,
-                                sub("([a-g])[0-9]{1,2}", "\\1", as.character(well)),
-                                "error")),
-         col = as.factor(ifelse(grepl("[a-g][0-9]{1,2}", as.character(well)) == TRUE,
-                                sub("[a-g]([0-9]{1,2})", "\\1", as.character(well)),
-                                "error")), #process and flag data with positional information
-         drop = as.logical(drop)) %>%
-  separate(sample_id, c("genetic_background", "exogenous_genetic"), sep = "_[KOermCF123]{0,5}_?",
-           extra = "merge", remove = FALSE) #separate the sample_id into components
-str(working_data)
-
-#'
-#' from the separate function it's clear that there needs to be some reworking of the categories
-#' queries are made and categories simplified/merged
-#'
-
-#+ checking-data, results="hide"
-setkey(working_data, "exogenous_genetic")
-unique(working_data[,.(exogenous_genetic)]) # we need to clean up this category
-unique(working_data[NA_character_,.(exogenous_genetic, genetic_background, sample_strain, sample_id)]) #what are the entries which have NA?
-unique(working_data[exogenous_genetic == "",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-unique(working_data["20",.(exogenous_genetic, genetic_background, sample_strain, sample_id)]) # 1st working through the list
-working_data["20", exogenous_genetic := "pos1_agrA_20"]
-unique(working_data[exogenous_genetic == "pos1_empty",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-unique(working_data[exogenous_genetic == "empty",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "empty", exogenous_genetic := "pos1_empty"]
-unique(working_data[exogenous_genetic == "37" | exogenous_genetic == "77",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "37" | exogenous_genetic == "77", exogenous_genetic := ""]
-unique(working_data[exogenous_genetic == "37_empty" | exogenous_genetic == "77_empty",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "37_empty" | exogenous_genetic == "77_empty", exogenous_genetic := "pos1_empty"]
-unique(working_data[exogenous_genetic == "37_comp",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "37_comp", exogenous_genetic := "pos1_atl"]
-unique(working_data[exogenous_genetic == "comp20" | exogenous_genetic == "77_pos1_20",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "comp20" | exogenous_genetic == "77_pos1_20", exogenous_genetic := "pos1_agrA_20"]
-unique(working_data[exogenous_genetic == "comp",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[exogenous_genetic == "comp" & genetic_background == "atl", exogenous_genetic := "pos1_atl"
-             ][exogenous_genetic == "comp" & genetic_background == "ica", exogenous_genetic := "pos1_ica"
-               ][exogenous_genetic == "comp" & genetic_background == "srtA", exogenous_genetic := "pos1_srtA"]
-unique(working_data[,.(genetic_background)]) # check the other separated column
-unique(working_data[genetic_background == "",.(exogenous_genetic, genetic_background, sample_strain, sample_id)])
-working_data[, simple_id := as.factor(paste(genetic_background, exogenous_genetic, sep = "_"))]
-
-#' 
-#' some last final cleaning
-#' 
-
-#+ remove-160324-col6
-working_data[date == "160324" & col == "6", drop := TRUE]
-working_data <- filter(working_data, drop == FALSE)
-
-#' ##Quick visulaization
-#' 
-#' the plotted raw OD's in the style of Tecan output
-#' 
-
-#+ raw-OD-map, fig.width=15, fig.height=20
-raw_platemap <- ggplot(working_data, aes(col, row, label = sample_id)) +
-  geom_raster(aes(fill=OD)) +
-  geom_text(aes(colour = sample_strain),fontface = "bold", size = 3, angle = -45) +
-  facet_grid(plate~date)
-raw_platemap
+#+ append
+# append hla data from R.data file
+load("Data/hla_tidy.RData")
+working_data <- rbind(working_data, hla_tidy)
+working_data$sample_id <- factor(working_data$sample_id)
 
 #' ##Normalize
 

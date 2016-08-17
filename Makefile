@@ -8,9 +8,12 @@ crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
 Data/crystal_violet.RData: 
 	Rscript "crystal_violet_datawrangle.R";
 
-rafts_mutants_stats_vis.html:
+rafts_mutants_stats_vis.html: Data/hla_tidy.RData
 	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm "crystal_violet_stats_vis.Rmd"
+
+Data/hla_tidy.RData: 
+	Rscript "hla_tidy.R"
 
 #these were made later with moe understanding
 22251_effsize.pdf:

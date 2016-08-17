@@ -425,4 +425,4 @@ fligner.test(OD_adjusted ~ simple_id, data=norm_data) # Figner-Killeen Test of H
 #' save the outputs into the Data folder for visualization and stats
 
 #+ save
-save(norm_data, file="Data/crystal_violet_biofilm.RData")
+save(norm_data, file="Data/crystal_violet.RData")

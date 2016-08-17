@@ -59,7 +59,7 @@ original_par <- par() #for resetting to original par after generating the plot i
 #' ##Data import and processing: 
 #' 
 #+ first-mover
-tablename <- "140516_WPH_test.csv"
+tablename <- "Data/hla/140516_WPH_test.csv"
 #'
 #' copy and pasted with modification from my very first R scripts :P
 #'   
@@ -78,7 +78,7 @@ melted_data <- melt(expdata[c('Time', testnames)], id.vars='Time', na.rm=TRUE, v
 #+ bind
 str(melted_data)
 working_data <- data.frame(melted_data, date = "140516")
-tablename <- "140711_WPH_2nd.csv" #second table to import
+tablename <- "Data/hla/140711_WPH_2nd.csv" #second table to import
 
 #+ import2,echo=FALSE, ref.label="import-process-data"
 
@@ -88,7 +88,7 @@ tablename <- "140711_WPH_2nd.csv" #second table to import
 #' 
 str(melted_data)
 working_data <- rbind(working_data, data.frame(melted_data, date = "140711"))
-tablename <- "141112_WHPacomp.csv" #3rd table to import
+tablename <- "Data/hla/141112_WHPacomp.csv" #3rd table to import
 
 #+ import3, echo=FALSE, ref.label="import-process-data"
 
@@ -98,7 +98,7 @@ tablename <- "141112_WHPacomp.csv" #3rd table to import
 #' 
 str(melted_data)
 working_data <- rbind(working_data, data.frame(melted_data, date = "141112"))
-tablename <- "150123_WHPcomp.csv" #last table to import
+tablename <- "Data/hla/150123_WHPcomp.csv" #last table to import
 
 #+ import4, echo=FALSE, ref.label="import-process-data"
 
@@ -170,4 +170,4 @@ hla_tidy <- data.table(working_data)
 hla_tidy[, Time := NULL][, ':=' (count = NA, dilution = NA, sample_strain = as.factor("LAC"), notes = NA)]
 #label normalization
 hla_tidy[sample_id == "hla", sample_id := "hla_KO"][sample_id == "WT", sample_id := "wt"]
-save(hla_tidy, file = "hla_tidy.RData")
+save(hla_tidy, file = "Data/hla_tidy.RData")

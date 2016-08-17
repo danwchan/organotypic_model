@@ -3,6 +3,7 @@ analysis_html_documentation: crystal_violet_stats_vis.html
 
 crystal_violet_stats_vis.html:
 	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')"
+	rm "crystal_violet_stats_vis.Rmd"
 
 160530_raft_figures.html:
 	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160530_organotypic_collated/160530_raft_figures.R', knit = FALSE))"

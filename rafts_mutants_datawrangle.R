@@ -76,7 +76,7 @@ original_par <- par() #for resetting to original par after generating the plot i
 
 #+ import-data
 #' import the data from csv
-raw_data <- read.csv('160520_merged_KO.csv',comment.char = '#') #import the data from csv
+raw_data <- read.csv('Data/160520_merged_KO.csv',comment.char = '#') #import the data from csv
 str(raw_data)
 
 #' ###Inital processing

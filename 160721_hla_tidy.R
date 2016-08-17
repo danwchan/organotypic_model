@@ -35,18 +35,6 @@ knitr::opts_chunk$set(warning = FALSE, tidy = FALSE)
 #'  
 #+ import-libraries, message=FALSE
 #import libraries
-#modelling
-require(car)
-require(fitdistrplus)
-require(lme4)
-require(nlme)
-#statistical tests
-require(stats)
-require(lmerTest)
-require(multcomp)
-require(dunn.test)
-require(orddom)
-require(equivalence)
 #plottting
 require(gplots)
 require(ggplot2)

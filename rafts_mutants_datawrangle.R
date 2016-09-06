@@ -76,65 +76,75 @@ original_par <- par() #for resetting to original par after generating the plot i
 
 #+ import-data
 #' import the data from csv
-raw_data <- read.csv('Data/160520_merged_KO.csv',comment.char = '#') #import the data from csv
+raw_data <- read.csv('Data/rafts_cfu_merged/160520_merged_KO.csv',comment.char = '#') #import the data from csv
 str(raw_data)
 
 #+ process-data
 working_data <- raw_data %>%
-  filter(notes == ''| notes == 'double' | notes == 'mix' | notes == 'double_infected') %>% #extract only certain notes
-  transform(timepoint = as.factor(timepoint),
-            date = as.factor(date)) %>% #make timepoint and date a factor
-  mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_')), #add an id column with all experimental variables
-         cfu = ifelse(notes == 'double' | notes == "double_infected", 
+  transform(timepoint = as.factor(timepoint)) %>% #make timepoint a factor
+  mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_')),
+         exp_status = as.factor(ifelse(grepl("agar.*", as.character(notes)) == TRUE,
+                                       "calibration",
+                                       "")), #flag the experimental data from those used to QA the initial innoculum
+         double_factor = as.factor(ifelse(grepl(".*double", as.character(notes)) == TRUE,
+                                          "double",
+                                          "")), #flag double drops, where the 3uL merges into one
+         cfu = ifelse(double_factor == 'double',
                       10^dilution * 50 * count / 2, 
-                      10^dilution * 50 * count)) %>% #calculate cfu conditionally
-  filter(cfu != 'NA') #remove NA's
+                      10^dilution * 50 * count)) #calculate cfu, where double is normalized to the regular 3uL drop
 str(working_data)
 
+#+ import-data2
+#i import the data for the agr experiments (held seperately before)
+raw_data <- read.csv('Data/rafts_cfu_merged/160520_agr_comp_merged.csv',comment.char = '#')
+str(raw_data)
+
+#+ process-data2
+agr_data <- raw_data %>%
+  transform(timepoint = as.factor(timepoint)) %>% #make timepoint a factor
+  mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_')),
+         exp_status = as.factor(ifelse(grepl("agar.*", as.character(notes)) == TRUE,
+                                       "calibration",
+                                       "")), #flag the experimental data from those used to QA the initial innoculum
+         double_factor = as.factor(ifelse(grepl(".*double", as.character(notes)) == TRUE,
+                                          "double",
+                                          "")), #flag double drops, where the 3uL merges into one
+         cfu = ifelse(double_factor == 'double',
+                      10^dilution * 50 * count / 2, 
+                      10^dilution * 50 * count)) #calculate cfu, where double is normalized to the regular 3uL drop
+str(agr_data)
+
+
 #+ append
+#append the agr data
+working_data <- rbind(working_data, agr_data)
+
 # append hla data from R.data file
 load("Data/hla_tidy.RData")
-working_data <- rbind(working_data, hla_tidy)
+working_data <- rbind(working_data, hla_tidy, fill=TRUE)
 working_data$sample_id <- factor(working_data$sample_id)
 
-#' ##Normalize
-
-#' because the "biofilms" are sensitive to washing I am normalizing them to the "empty" (background) well and "wt" (proportional constant) well in each row
-#' if there are more than one wt samples of the same strain: the "wt" wells are averaged per row
-
-#add the OD_adjusted column which takes the "empty" in the same row and subtracts it from the rest of the values then divde that by the adjusted "wt" value in the same row
-#to test the function: x <- filter(working_data, sample_id =="wt")
-
-#+ normalize-data
-norm_data <- working_data[sample_strain == "empty", empty_well_values := OD
-                          ][, OD_backgroundsub := OD - mean(empty_well_values, na.rm = TRUE), keyby = .(date, plate, row)
-                            ][sample_id == "wt", wt_well_values := OD_backgroundsub
-                              ][, OD_adjusted := OD_backgroundsub / mean(wt_well_values, na.rm = TRUE), keyby = .(date,plate,row)
-                                ][, id_merge := as.factor(paste(date, genetic_background, "KO", exogenous_genetic, sep = '_')) ] # and make a merged id
+#' ##Transform
+#' some typical transformations which might prove useful
 
 #+ transform-data
-norm_data <- norm_data[!OD_adjusted < 0,] #some anomolusly low OD_adjusted values
-max_OD <- max(norm_data$OD_adjusted)
-min_OD <- min(norm_data$OD_adjusted)
-norm_data <- norm_data %>%
-  mutate(OD_log = ifelse(OD_adjusted > 0, log10(OD_adjusted), 0),
-         OD_scale = (OD_adjusted - min_OD)/(max_OD - min_OD))%>% #use the log base 10 and scale to 0-1
-  filter(sample_strain != "empty", drop == FALSE)
-norm_data <- norm_data[!OD_adjusted < 0] #get rid of some wierd under 0 points (what are they exactly?)
+max_cfu <- max(working_data$cfu)
+min_cfu <- min(working_data$cfu)
 
-#+ norm-OD-map, fig.width=15, fig.height=20
-norm_platemap <- ggplot(norm_data, aes(col, row, label = sample_id)) +
-  geom_raster(aes(fill=OD_adjusted)) +
-  geom_text(fontface = "bold", size = 3, angle = -45) +
-  facet_grid(plate~date)
-norm_platemap
+norm_summary <- working_data %>%
+  filter(exp_status != "calibration") %>%
+  filter(notes != "infected" & notes != "infected_double" & notes != "double_infected" & notes != "visible") %>%
+  filter(sample_id != "agrA_C123F_comp-P2min") %>%
+  filter(cfu != "NA") %>%
+  mutate(cfu_log = log10(cfu), 
+         cfu_scale = (cfu - min_cfu)/(max_cfu - min_cfu)) #use the log base 10 and scale to 0-1
 
 #' ##Dirty group comparison
 #' 
 #' since I am going to exclude the anaerobic data in the later part of the this analysis here I will look at it
 #' 
 #+ da-plots, message=FALSE, fig.width=12, fig.height=10
-summary1plot <- ggplot(norm_data, aes(sample_id, OD_adjusted)) +
+summary1plot <- ggplot(norm_summary, aes(sample_id, OD_adjusted)) +
   scale_colour_brewer(palette = "YlOrRd") +
   geom_boxplot(outlier.shape=NA) +
   geom_point(aes(shape = plate, colour = date), position = "jitter") +

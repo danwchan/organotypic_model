@@ -167,7 +167,7 @@ scatterplot
 #+ for latr merging, eval=FALSE
 hla_tidy <- data.table(working_data)
 #column normalization
-hla_tidy[, Time := NULL][, ':=' (count = NA, dilution = NA, sample_strain = as.factor("LAC"), notes = NA)]
+hla_tidy[, Time := NULL][, ':=' (count = NA, dilution = NA, sample_strain = as.factor("LAC"), notes = "", exp_status = "", double_factor = "")]
 #label normalization
 hla_tidy[sample_id == "hla", sample_id := "hla_KO"][sample_id == "WT", sample_id := "wt"]
 save(hla_tidy, file = "Data/hla_tidy.RData")

@@ -121,7 +121,7 @@ working_data <- rbind(working_data, agr_data)
 
 # append hla data from R.data file
 load("Data/hla_tidy.RData")
-working_data <- rbind(working_data, hla_tidy, fill=TRUE)
+working_data <- rbind(working_data, hla_tidy)
 working_data$sample_id <- factor(working_data$sample_id)
 
 #' ##Transform
@@ -141,16 +141,15 @@ norm_summary <- working_data %>%
 
 #' ##Dirty group comparison
 #' 
-#' since I am going to exclude the anaerobic data in the later part of the this analysis here I will look at it
+#' look at the the merged data sets
 #' 
 #+ da-plots, message=FALSE, fig.width=12, fig.height=10
-summary1plot <- ggplot(norm_summary, aes(sample_id, OD_adjusted)) +
-  scale_colour_brewer(palette = "YlOrRd") +
+summary1plot <- ggplot(norm_summary, aes(sample_id, cfu)) +
   geom_boxplot(outlier.shape=NA) +
-  geom_point(aes(shape = plate, colour = date), position = "jitter") +
+  geom_point(aes(colour = date), position = "jitter") +
   theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
   scale_y_log10()
-summary1plot #adjusted OD by detailed groupings
+summary1plot 
 
 summary2plot <- ggplot(norm_data, aes(simple_id, OD)) +
   scale_shape_manual(values = c(1,16,7)) +

@@ -14,6 +14,7 @@ rafts_mutants_stats_vis.html: Data/hla_tidy.RData
 
 Data/hla_tidy.RData: 
 	Rscript "hla_tidy.R"
+	rm "Rplots.pdf"
 
 #these were made later with moe understanding
 22251_effsize.pdf:

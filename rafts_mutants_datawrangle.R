@@ -133,8 +133,6 @@ min_cfu <- min(working_data$cfu)
 
 norm_data <- working_data %>%
   filter(exp_status != "calibration") %>%
-  filter(notes != "infected" & notes != "infected_double" & notes != "double_infected" & notes != "visible") %>%
-  filter(sample_id != "agrA_C123F_comp-P2min") %>%
   filter(cfu != "NA") %>%
   mutate(cfu_log = log10(cfu), 
          cfu_scale = (cfu - min_cfu)/(max_cfu - min_cfu)) #use the log base 10 and scale to 0-1
@@ -185,7 +183,7 @@ xselect <- combn(cfu_aggregate[["sample_id"]], 2)
 names(cfu_aggregate$cfu) <- cfu_aggregate$sample_id
 
 #+ explore-distributions, fig.width=12, fig.height=30
-par(mfcol = c(4,2), mar = c(2,2,2,1))
+par(mfcol = c(5,2), mar = c(2,2,2,1))
 distribution_explore <- lapply(cfu_aggregate$cfu, function(x) descdist(x, boot = 1000))
 par(original_par)
 
@@ -201,7 +199,7 @@ fits <- c(exp = fit_exp, gamma = fit_gamma, norm = fit_norm, lnorm = fit_lnorm, 
 #+ compare-AICs
 AIC_extract <- list(names(fit_norm), c("exp", "gamma", "norm", "lnorm", "unif", "weibull"))
 AIC_summary <- get_AIC(fits) %>%
-  matrix(8,6, dimnames = AIC_extract)
+  matrix(9,6, dimnames = AIC_extract)
 AIC_summary
 
 #+ set-up1
@@ -243,14 +241,14 @@ index1 <- 6
 #+ set-up5
 #the coordinates of the subset of the dat you want to look at to assess fit
 #agrA_pos1_empty
-index1 <- 7
+index1 <- 8
 
 #+ plot-fits5, ref.label="plot-fits"
 
 #' ## Test Normality
 
 #'
-#'based on the fitdist I will use log transformed data
+#'based on the fitdist log transformed data should be used with parametric analysis
 #'
 
 #+ Q-Q-plot

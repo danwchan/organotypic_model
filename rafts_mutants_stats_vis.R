@@ -75,6 +75,14 @@ logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_l
   return(p)
 }
 
+numeric_to_label <- function (numeric, prefix = "", precision = 3, round_method = floor) {
+  value <- as.integer(numeric)
+  exponent <- round_method(log10(numeric))
+  number <- signif(numeric * 10^(exponent * -1), digits = precision)
+  label <- paste0(prefix, number, "%*%10^{", exponent, "}")
+  return(label)
+}
+
 #+ style, inlcude=FALSE
 theme_mod <- theme_bw() +
   theme(text = element_text(size = 16),
@@ -96,7 +104,7 @@ original_par <- par() #for resetting to original par after generating the plot i
 
 #+ load-data
 load("Data/merged_raft_cfu.RData")
-norm_data <- norm_data[simple_id %in% c("wt_NA", "agrA_", "atl_", "icaA_", "srtA_", "agrA_pos1_agrA_20", "agrA_pos1_empty")] #filter
+norm_data <- norm_data[sample_id %in% c("wt", "agrA_KO", "atl_KO", "hla_KO", "icaA_KO", "srtA_KO", "agrA_C123F_comp-20", "agrA_C123F_empty")] #filter
 
 #' 
 #' #Initial Visualize
@@ -105,20 +113,20 @@ norm_data <- norm_data[simple_id %in% c("wt_NA", "agrA_", "atl_", "icaA_", "srtA
 #+ dirty-visualze
 #+ data-summary
 data_summary <- norm_data %>%
-  group_by(simple_id) %>%
+  group_by(sample_id) %>%
   summarise(
-    mean = mean(OD_adjusted, na.rm = TRUE), # means comparison
-    sdev = sd(OD_adjusted, na.rm = TRUE),
-    ci_lower = t.test(OD_adjusted)$conf.int[1], #95% confidence intervals CANT DO IT CAUSE THE DATA?
-    ci_upper = t.test(OD_adjusted)$conf.int[2])
+    mean = mean(cfu_log, na.rm = TRUE), # means comparison
+    sdev = sd(cfu_log, na.rm = TRUE),
+    ci_lower = t.test(cfu_log)$conf.int[1], #95% confidence intervals CANT DO IT CAUSE THE DATA?
+    ci_upper = t.test(cfu_log)$conf.int[2])
 data_summary
 
 #+ summary-plot, message=FALSE, fig.width=12, fig.height=10
 pos = position_dodge(width = 0.9)#for error bars to dodge dodging columns
-data_summary_plot <- ggplot(data_summary, aes(simple_id, mean, ymin = ci_lower, ymax = ci_upper)) +
-  geom_bar(aes(fill = simple_id), stat="identity", position = pos, width = 0.9) +
+data_summary_plot <- ggplot(data_summary, aes(sample_id, mean, ymin = ci_lower, ymax = ci_upper)) +
+  geom_bar(aes(fill = sample_id), stat="identity", position = pos, width = 0.9) +
   theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
-  geom_errorbar(aes(fill = simple_id), width = 0.2, position = pos)
+  geom_errorbar(aes(fill = sample_id), width = 0.2, position = pos)
 data_summary_plot
 
 #' 
@@ -127,17 +135,21 @@ data_summary_plot
 #' These variables affect the coming scripts.
 #' blocking_factor is the column (data frame variable) in which all experimental conditions are tested in
 #' test_factor1 is the column (data frame variable) which contains the experimental conditions
+#' also reorder the factors to represent the presentation preferred order
 #'
 
 #+ set
-transformed_data <- c("OD", "OD_adjusted") #different transformations/normalizations
+transformed_data <- c("cfu", "cfu_log") #different transformations/normalizations
 alpha_level <- 0.05
-blocking_factor <- "drop" #this is not a blocking factor, it includes all data
-test_factor1 <- "simple_id"
+blocking_factor <- "timepoint"
+test_factor1 <- "sample_id"
 set_data <- transformed_data[[2]]
-set_test <- "ordinal" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
+set_test <- "metric" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
 
-#' 
+norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c(5,1,2,10,3,4,9,7)])
+norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
+
+#'
 #' #Effect Size
 #'
 #' Effect size is calculated and plotted
@@ -153,7 +165,7 @@ orddom_summary <- norm_data %>%
   split(norm_data[[blocking_factor]], drop = TRUE) %>%
   map(
     function(blocked_data) {
-      combinations <- combn(unique(blocked_data[[test_factor1]]), 2)
+      combinations <- combn(sort(unique(blocked_data[[test_factor1]])), 2)
       df <- data.frame()
       for (i in 1:dim(combinations)[[2]]) {
         id1 <- unlist(combinations[,i])[[1]]
@@ -178,46 +190,57 @@ orddom_summary <- norm_data %>%
   filter(Var2 == set_test)
 
 #+ comparisons-label
-l1 <- expression(atop(paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA), " vs."), paste(italic(agrA[C123F]), " + pOS1 empty")))
-l2 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 empty")))
-l3 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA))))
-l4 <- expression(atop("wild-type vs. ", paste("srtA", ":", ":", "erm")))
-l5 <- expression(atop("wild-type vs. ", paste("icaA", ":", ":", "erm")))
-l6 <- expression(atop("wild-type vs. ", italic(Delta*atl)))
-l7 <- expression(atop("wild-type vs. ", italic(agrA[C123F])))
+l8 <- expression(atop(paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA), " vs."), paste(italic(agrA[C123F]), " + pOS1 empty")))
+l7 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA))))
+l6 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 empty")))
+l5 <- expression(atop("wild-type vs. ", italic(paste("srtA", ":", ":", "erm"))))
+l4 <- expression(atop("wild-type vs. ", italic(paste("icaA", ":", ":", "erm"))))
+l3 <- expression(atop("wild-type vs. ", italic(paste("hlaA", ":", ":", "erm"))))
+l2 <- expression(atop("wild-type vs. ", italic(Delta*atl)))
+l1 <- expression(atop("wild-type vs. ", italic(agrA[C123F])))
 
 #+ filtered-plot
-orddom_sliced <- slice(orddom_summary, c(1,16:21)) #filter
+orddom_sliced <- slice(orddom_summary, c(1,2,43:56)) #filter
+orddom_sliced$timepoint <- factor(orddom_sliced$timepoint, levels(orddom_sliced$timepoint)[c(2,1)]) #reorder factor
+
 effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
   geom_vline(xintercept =  0, linetype = 2, alpha = 0.5) +
   geom_point() +
   geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
                                    xmax = CI.high)) +
-  labs(x = expression(paste("Cliff's ", Delta)), y = "Comparison") +
-  scale_y_discrete(labels = c(l7, l6, l5, l4, l3, l2, l1)) +
-  coord_cartesian(xlim = c(-1, 1)) +
+  labs(x = expression(paste("Cohen's ", italic(d))), y = "Comparison") +
+  scale_y_discrete(labels = c(l8, l7, l6, l5, l4, l3, l2, l1)) +
+  coord_cartesian(xlim = c(-1.5, 1.5)) +
 #  facet_grid(.~timepoint) +
-#  facet_grid(reformulate(".", facet_type)) +
+  facet_grid(reformulate(blocking_factor, ".")) +
   theme_mod
 effsize_plot #plot
 
 #+ save-graph, eval=FALSE
-ggsave("Figures/test.tiff", plot = effsize_plot, width = 30, height = 15, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
+ggsave("Figures/rafts_mutants_effsize.tiff", plot = effsize_plot, width = 30, height = 15, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
 
 #' #NHST
 #' 
 #' null hypothesis: the cfu from mutants are not different
-#' since the fomer analysis was done with the non-parametric cliff's delta we are using the kruskall-wallis with dunn's post hoc here
+#' we are using the kruskall-wallis with dunn's post hoc on the untrasnformed data to understand which group are different from each other for a given timepoint
 #' 
+#+split
+splitted <- split(norm_data, norm_data[[blocking_factor]], drop = TRUE)
 
 #non parametric tests
 #+ Kruskall-Wallis
-kruskal.test(OD_adjusted ~ simple_id, data = norm_data) #Kruskall-Wallis test for a group with stochastic dominance
+map(splitted, function(x) kruskal.test(cfu ~ sample_id, data = x)) #Kruskall-Wallis test for a group with stochastic dominance
 
 #+ Post-hoc-pairwise, message=FALSE
-dunns_test <- dunn.test(norm_data$OD_adjusted, norm_data$simple_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-sig_matrix <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 21, 3, dimnames = list(dunns_test$comparisons, c("Z", "p-value", "p-adjusted")))
-sig_matrix
+dunns_test <- dunn.test(splitted[[1]]$cfu, splitted[[1]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
+sig_matrix1 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 28, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix1 <- data.table(sig_matrix1, keep.rownames = TRUE)
+sig_matrix1[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
+
+dunns_test <- dunn.test(splitted[[2]]$cfu, splitted[[2]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
+sig_matrix2 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 28, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix2 <- data.table(sig_matrix2, keep.rownames = TRUE)
+sig_matrix2[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
 
 #'
 #' #Main figure
@@ -226,29 +249,55 @@ sig_matrix
 #'
 
 #+ labels
-l1 <- "wild type"
+l1 <- "wild-type"
 l2 <- expression(italic(agrA[C123F]))
 l3 <- expression(italic(Delta*atl))
-l4 <- expression(italic(paste("icaA", ":", ":", "erm")))
-l5 <- expression(italic(paste("srt", ":", ":", "erm")))
-l6 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
-l7 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
-annotate_grid <- data.frame(x = 1:4, y = 1:4) #for the overlay later to allow for drawing stats comparison paths
-norm_data$simple_id <- factor(norm_data$simple_id, c("wt_NA", "srtA_", "icaA_", "atl_", "agrA_", "agrA_pos1_agrA_20", "agrA_pos1_empty")) #reorder factor
+l4 <- expression(italic(paste("hlaA", ":", ":", "erm")))
+l5 <- expression(italic(paste("icaA", ":", ":", "erm")))
+l6 <- expression(italic(paste("srt", ":", ":", "erm")))
+l7 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
+l8 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
+
+facet1 <- data.frame(x = 1:4, y = 1:4, timepoint = "72 hours") #for the overlay later to allow for drawing stats comparison paths
+facet2 <- data.frame(x = 1:4, y = 1:4, timepoint = "120 hours") #for the overlay later to allow for drawing stats comparison paths
+comparisons <- list(c(1,2), c(1,3), c(1,4), c(1,5), c(1,6), c(1,7), c(1,8), c(7,8)) #state the comparisons
+p <- logscale_sigbars_generator(1e11, 0.5e9, 8) # to calculate the postions for statisitical significance bars on a log scale
 
 #+ overview-plot, fig.width=7, fig.height=7
-main_fig <- ggplot(norm_data, aes(simple_id, OD_adjusted)) +
+main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
   geom_boxplot(outlier.shape = NA, width = 0.5, alpha = 0.5) +
   geom_point(position = position_jitter(width = 0.25), size = 0.3) +
-#  scale_x_discrete(labels = c(label5, label4, label3, label2, label1)) +
-  labs(x = " ", y = expression(normalized~OD[595])) +
+  scale_x_discrete(labels = c(l1, l2, l3, l4, l5, l6, l7, l8)) +
+  labs(x = " ", y = "CFU / raft") +
+  coord_cartesian(ylim = c(1e5, 1e11)) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  facet_wrap(~timepoint) +
   theme_mod + 
-  geom_path(aes(x=c(1,1,4.9,4.9),y=c(7.8,8,8,8)), data = annotate_grid) +
-  annotate("text",x=3,y=8.2,label="p==1.51%*%10^{-11}", parse = TRUE) +
-  geom_path(aes(x=c(1,1,2,2),y=c(5,5.2,5.2,5)), data = annotate_grid) +
-  annotate("text",x=2.5,y=7.4,label="p==1.56%*%10^{-4}", parse = TRUE) +
-  geom_path(aes(x=c(1,1,3,3),y=c(6,6.2,6.2,6)), data = annotate_grid) +
-  annotate("text",x=2,y=6.4,label="p=1.00") +
-  geom_path(aes(x=c(1,1,4,4),y=c(7,7.2,7.2,7)), data = annotate_grid) +
-  annotate("text",x=1.5,y=5.4,label="p==1.85%*%10^{-1}", parse = TRUE)# data and overlay layer
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  #facet 1
+  main_fig +
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label="p==4.34%*%10^{-6}"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label="p==8.71%*%10^{-5}"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label="p==2.41%*%10^{-1}"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[4,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[4,5],label="p==1.94%*%10^{-1}"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
+  
+  # facet 2
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label="p==3.25%*%10^{-7}"), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label="p==6.67%*%10^{-2}"), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label="p==5.23%*%10^{-1}"), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[4,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[4,5],label="p==9.95%*%10^{-1}"), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label="p==1.00"), data = facet2, parse = TRUE)
 main_fig

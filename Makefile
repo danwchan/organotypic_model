@@ -7,13 +7,18 @@ crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
 
 Data/crystal_violet.RData: 
 	Rscript "crystal_violet_datawrangle.R";
+	rm "Rplots.pdf"
 
 rafts_mutants_stats_vis.html: Data/hla_tidy.RData
 	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
-	rm "crystal_violet_stats_vis.Rmd"
+	rm "rafts_mutants_stats_vis.Rmd"
 
 Data/hla_tidy.RData: 
 	Rscript "hla_tidy.R"
+	rm "Rplots.pdf"
+
+Data/merged_raft_cfu.RData:
+	Rscript "rafts_mutants_datawrangle.R"
 	rm "Rplots.pdf"
 
 #these were made later with moe understanding

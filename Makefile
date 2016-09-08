@@ -29,6 +29,9 @@ rafts_mutants_stats_vis.html: Data/hla_tidy.RData Data/merged_raft_cfu.RData
 	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm "rafts_mutants_stats_vis.Rmd"
 
+cfu_calibration_datawrangle.html:
+	Rscript -e "rmarkdown::render(knitr::spin('cfu_calibration_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "cfu_calibration_datawrangle.Rmd"
 
 #these were made later with moe understanding
 22251_effsize.pdf:
@@ -47,7 +50,7 @@ mainfigs: fig1_characterize_model.pdf fig2_SEM.pdf fig3_growth.pdf fig4_biofilm.
 
 suppfigs: figS1_experimental_setup.pdf figS2_sonicated.pdf figS3_22251.pdf figS4_newman.pdf figS5_PBS.pdf
 
-test.tiff:
+crystal_violet_figures:
 	Rscript "crystal_violet_stats_vis.R";
 	echo "$@ created, it is a large file..."
 

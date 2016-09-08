@@ -261,7 +261,7 @@ l8 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
 facet1 <- data.frame(x = 1:4, y = 1:4, timepoint = "72 hours") #for the overlay later to allow for drawing stats comparison paths
 facet2 <- data.frame(x = 1:4, y = 1:4, timepoint = "120 hours") #for the overlay later to allow for drawing stats comparison paths
 comparisons <- list(c(1,2), c(1,3), c(1,4), c(1,5), c(1,6), c(1,7), c(1,8), c(7,8)) #state the comparisons
-p <- logscale_sigbars_generator(1e11, 0.5e9, 8) # to calculate the postions for statisitical significance bars on a log scale
+p <- logscale_sigbars_generator(1e11, 0.5e9, 7) # to calculate the postions for statisitical significance bars on a log scale
 
 #+ overview-plot, fig.width=7, fig.height=7
 main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
@@ -274,7 +274,7 @@ main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
   facet_wrap(~timepoint) +
   theme_mod + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  #facet 1
+  #facet 1, labels are still manually added as is the level which subsets p in each path-text pair
   main_fig +
   geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
   geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label="p==4.34%*%10^{-6}"), data = facet1, parse = TRUE) +
@@ -286,9 +286,12 @@ main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
   geom_text(aes(x=median(comparisons[[4]]),y=p[4,5],label="p==1.94%*%10^{-1}"), data = facet1, parse = TRUE) +
   geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet1) +
   geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet1) +
-  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
-  
+  geom_path(aes(x=rep(comparisons[[6]], each = 2),y=p[6,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[6]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[7]], each = 2),y=p[7,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[7]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[8]], each = 2),y=p[1,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[8]]),y=p[5,5],label="p==1.00"), data = facet1, parse = TRUE) +
   # facet 2
   geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet2) +
   geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label="p==3.25%*%10^{-7}"), data = facet2, parse = TRUE) +

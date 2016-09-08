@@ -272,5 +272,5 @@ main_fig <- ggplot(norm_data, aes(simple_id, OD_adjusted)) +
 main_fig
 
 #+ save-graph2, eval=FALSE
-ggsave("Figures/crystal_violet_biofilm.tiff", plot = effsize_plot, width = 30, height = 15, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
+ggsave("Figures/crystal_violet_biofilm.tiff", plot = main_fig, width = 30, height = 15, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
 

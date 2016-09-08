@@ -56,7 +56,7 @@ require(tidyr)
 require(purrr)
 
 #+ functions, include=FALSE
-logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_levels = 1, tick_size = 0.01, default_step =1.5) {
+logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_levels = 1, tick_size = 0.01, default_step = 1.5, text_spacing = 2) {
   #someday it'll be nice to have some input verification
   print("positions generated:", quote = FALSE)
   print("the levels are counted from the bottom to top",quote = FALSE) 
@@ -64,12 +64,12 @@ logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_l
   print("p[level, 5] contains the text position", quote = FALSE) #some guidance
   range <- log(max_draw_dim) - log(min_draw_dim) #the range that the bars will be plotted in
   tick_size_log <- log(max_draw_dim) * tick_size # the size of the downturned ticks
-  step <- ifelse((range / number_bar_levels) < 1.5, (range / number_bar_levels), 1.5) # the spacing between bars
+  step <- ifelse((range / number_bar_levels) < default_step, (range / number_bar_levels), default_step) # the spacing between bars
   p <- matrix(0,number_bar_levels, 5) # the matrix of the results
   for (i in 1:number_bar_levels) {
     bar_position <- log(min_draw_dim) + (step*i)
     tick_postion <- bar_position - tick_size_log
-    text_position <- bar_position + (2 * tick_size_log)
+    text_position <- bar_position + (text_spacing * tick_size_log)
     p[i,] <- as.numeric(c(exp(tick_postion), exp(bar_position), exp(bar_position),exp(tick_postion), exp(text_position)))
   } #make it
   return(p)

@@ -1,17 +1,17 @@
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
-analysis_html_documentation: crystal_violet_stats_vis.html
-
-crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
-	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
-	rm "crystal_violet_stats_vis.Rmd"
+analysis_html_documentation: *.html
 
 Data/crystal_violet.RData: 
 	Rscript "crystal_violet_datawrangle.R";
 	rm "Rplots.pdf"
 
-rafts_mutants_stats_vis.html: Data/hla_tidy.RData
-	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
-	rm "rafts_mutants_stats_vis.Rmd"
+crystal_violet_datawrangle.html:
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "crystal_violet_datawrangle.Rmd"
+
+crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "crystal_violet_stats_vis.Rmd"
 
 Data/hla_tidy.RData: 
 	Rscript "hla_tidy.R"
@@ -20,6 +20,15 @@ Data/hla_tidy.RData:
 Data/merged_raft_cfu.RData:
 	Rscript "rafts_mutants_datawrangle.R"
 	rm "Rplots.pdf"
+
+rafts_mutants_datawrangle.html:
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "rafts_mutants_datawrangle.Rmd"
+
+rafts_mutants_stats_vis.html: Data/hla_tidy.RData Data/merged_raft_cfu.RData
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm "rafts_mutants_stats_vis.Rmd"
+
 
 #these were made later with moe understanding
 22251_effsize.pdf:

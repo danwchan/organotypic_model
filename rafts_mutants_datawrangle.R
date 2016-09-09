@@ -160,7 +160,7 @@ xselect <- combn(cfu_aggregate[["sample_id"]], 2)
 names(cfu_aggregate$cfu) <- cfu_aggregate$sample_id
 
 #+ explore-distributions, fig.width=12, fig.height=30
-par(mfcol = c(5,2), mar = c(2,2,2,1))
+par(mfcol = c(4,3), mar = c(2,2,2,1))
 distribution_explore <- lapply(cfu_aggregate$cfu, function(x) descdist(x, boot = 1000))
 par(original_par)
 
@@ -176,7 +176,7 @@ fits <- c(exp = fit_exp, gamma = fit_gamma, norm = fit_norm, lnorm = fit_lnorm, 
 #+ compare-AICs
 AIC_extract <- list(names(fit_norm), c("exp", "gamma", "norm", "lnorm", "unif", "weibull"))
 AIC_summary <- get_AIC(fits) %>%
-  matrix(9,6, dimnames = AIC_extract)
+  matrix(12,6, dimnames = AIC_extract)
 AIC_summary
 
 #+ set-up1
@@ -221,6 +221,13 @@ index1 <- 6
 index1 <- 8
 
 #+ plot-fits5, ref.label="plot-fits"
+
+#+ set-up6
+#the coordinates of the subset of the dat you want to look at to assess fit
+#d3PSM_empty
+index1 <- 11
+
+#+ plot-fits6, ref.label="plot-fits"
 
 #' ## Test Normality
 

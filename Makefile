@@ -29,12 +29,18 @@ rafts_mutants_stats_vis.html: Data/hla_tidy.RData Data/merged_raft_cfu.RData
 	Rscript -e rmarkdown::render(knitr::spin("rafts_mutants_stats_vis.R", knit = FALSE), output_dir = "analysis_html");
 	rm rafts_mutants_stats_vis.Rmd
 
+rafts_mutants_figures:
+	Rscript rafts_mutants_stats_vis.R
+	rm Rplots.pdf
+	echo $@ created, it is a large file...
+
 cfu_calibration_datawrangle.html:
 	Rscript -e rmarkdown::render(knitr::spin("cfu_calibration_datawrangle.R", knit = FALSE), output_dir = "analysis_html");
 	rm cfu_calibration_datawrangle.Rmd
 
 cfu_calibration_figures:
 	Rscript cfu_calibration_stats_vis.R
+	rm Rplots.pdf
 	echo $@ created, it is a large file...
 
 fig1.pdf: cfu_calibration_figures

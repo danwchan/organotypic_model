@@ -77,47 +77,24 @@ original_par <- par() #for resetting to original par after generating the plot i
 #+ import-data
 #' import the data from csv
 raw_data <- read.csv('Data/rafts_cfu_merged/160520_merged_KO.csv',comment.char = '#') #import the data from csv
-str(raw_data)
+raw_data2 <- read.csv('Data/rafts_cfu_merged/160520_agr_comp_merged.csv',comment.char = '#') # import the data for the agr experiments (held seperately before)
+raw_data3 <- read.csv('Data/psm_module/160901_PSMad.csv',comment.char = '#') # import the data for the PSM experiments (held seperately before)
+#raw_data4 <- read.csv('Data/rafts_cfu_merged/160520_agr_comp_merged.csv',comment.char = '#') 
 
 #+ process-data
-working_data <- raw_data %>%
+working_data <- rbind(raw_data, raw_data2, raw_data3) %>%
   transform(timepoint = as.factor(timepoint)) %>% #make timepoint a factor
   mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_')),
-         exp_status = as.factor(ifelse(grepl("agar.*", as.character(notes)) == TRUE,
+         exp_status = as.factor(ifelse(grepl("agar", as.character(notes)) == TRUE,
                                        "calibration",
                                        "")), #flag the experimental data from those used to QA the initial innoculum
-         double_factor = as.factor(ifelse(grepl(".*double", as.character(notes)) == TRUE,
+         double_factor = as.factor(ifelse(grepl("double", as.character(notes)) == TRUE,
                                           "double",
                                           "")), #flag double drops, where the 3uL merges into one
          cfu = ifelse(double_factor == 'double',
                       10^dilution * 50 * count / 2, 
                       10^dilution * 50 * count)) #calculate cfu, where double is normalized to the regular 3uL drop
 str(working_data)
-
-#+ import-data2
-#i import the data for the agr experiments (held seperately before)
-raw_data <- read.csv('Data/rafts_cfu_merged/160520_agr_comp_merged.csv',comment.char = '#')
-str(raw_data)
-
-#+ process-data2
-agr_data <- raw_data %>%
-  transform(timepoint = as.factor(timepoint)) %>% #make timepoint a factor
-  mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_')),
-         exp_status = as.factor(ifelse(grepl("agar.*", as.character(notes)) == TRUE,
-                                       "calibration",
-                                       "")), #flag the experimental data from those used to QA the initial innoculum
-         double_factor = as.factor(ifelse(grepl(".*double", as.character(notes)) == TRUE,
-                                          "double",
-                                          "")), #flag double drops, where the 3uL merges into one
-         cfu = ifelse(double_factor == 'double',
-                      10^dilution * 50 * count / 2, 
-                      10^dilution * 50 * count)) #calculate cfu, where double is normalized to the regular 3uL drop
-str(agr_data)
-
-
-#+ append
-#append the agr data
-working_data <- rbind(working_data, agr_data)
 
 # append hla data from R.data file
 load("Data/hla_tidy.RData")

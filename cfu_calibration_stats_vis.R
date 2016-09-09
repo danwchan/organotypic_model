@@ -208,6 +208,7 @@ ordinal_effsize <- ggplot(orddom_summary, aes(delta, comparison)) + #plot the da
   labs(x = expression(paste("Cohen's ", italic(d))), y = "Comparison") +
   scale_y_discrete(labels = c(label3, label2, label1)) +
   coord_cartesian(xlim = c(-2.5, 2.5)) +
+  theme_mod +
   facet_grid(~timepoint)
 ordinal_effsize
 

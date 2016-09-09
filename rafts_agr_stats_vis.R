@@ -111,6 +111,71 @@ test_factor1 <- "sample_id"
 set_data <- transformed_data[[2]]
 set_test <- "metric" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
 
-norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c(2,1,4,3)])
+norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c(5,1,9,7)])
 norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
 
+#'
+#' #Effect Size
+#'
+#' Effect size is calculated and plotted
+#'
+
+#+ calculate
+orddom_cols <- c("comparison", "timepoint", "Var2", "1-alpha", "A X>Y", "A Y>X", "CI high", 
+                 "CI low", "Cohen's d", "d CI high", "d CI low", "delta", "df", "H1 tails p/CI", 
+                 "N #Y<X", "N #Y=X", "N #Y>X", "n in X", "n in Y", "NNT", "p", "PS X>Y", "PS Y>X", 
+                 "s delta", "se delta", "type_title", "var d.i", "var delta", "var dij", "var dj.", 
+                 "var1_X", "var2_Y", "z/t score") #column names for orddom ouput
+orddom_summary <- norm_data %>%
+  split(norm_data[[blocking_factor]], drop = TRUE) %>%
+  map(
+    function(blocked_data) {
+      combinations <- combn(sort(unique(blocked_data[[test_factor1]])), 2)
+      df <- data.frame()
+      for (i in 1:dim(combinations)[[2]]) {
+        id1 <- unlist(combinations[,i])[[1]]
+        id2 <- unlist(combinations[,i])[[2]]
+        data1 <- blocked_data[blocked_data[[test_factor1]] == id1,]
+        data2 <- blocked_data[blocked_data[[test_factor1]] == id2,]
+        comparison <- paste(id1, id2, sep = "-")
+        #transformed data needs to know a position
+        data <- cbind(melt(orddom(data1[[set_data]], data2[[set_data]], 
+                                  alpha = 0.05, 
+                                  symmetric = FALSE, 
+                                  onetailed = FALSE,
+                                  t.welch = TRUE)),
+                      comparison)
+        df <- rbind(data, df)}
+      return(df)
+    }) %>% #calculate orddom matrix by blocking factor
+  at_depth(0, ~ bind_rows(.x, .id = "timepoint")) %>% #bind the data frames together by row
+  dcast(comparison + timepoint + Var2 ~ Var1) %>% #merge intp final data frame
+  map_at(orddom_cols[c(-1, -2, -3, -26,-31, -32)], as.numeric) %>%
+  as.data.frame() %>%
+  filter(Var2 == set_test)
+
+#+ comparisons-label
+l4 <- expression(atop(paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA), " vs."), paste(italic(agrA[C123F]), " + pOS1 empty")))
+l3 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 ", italic(agrA))))
+l2 <- expression(atop("wild-type vs. ", paste(italic(agrA[C123F]), " + pOS1 empty")))
+l1 <- expression(atop("wild-type vs. ", italic(agrA[C123F])))
+
+#+ filtered-plot
+orddom_sliced <- slice(orddom_summary, c(1,2,7:12)) #filter
+orddom_sliced$timepoint <- factor(orddom_sliced$timepoint, levels(orddom_sliced$timepoint)[c(2,1)]) #reorder factor
+
+effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
+  geom_vline(xintercept =  0, linetype = 2, alpha = 0.5) +
+  geom_point() +
+  geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
+                                   xmax = CI.high)) +
+  labs(x = expression(paste("Cohen's ", italic(d))), y = "Comparison") +
+  scale_y_discrete(labels = c(l4, l3, l2, l1)) +
+  coord_cartesian(xlim = c(-1.5, 1.5)) +
+  #  facet_grid(.~timepoint) +
+  facet_grid(reformulate(blocking_factor, ".")) +
+  theme_mod
+effsize_plot #plot
+
+#+ save-graph, eval=FALSE
+ggsave("Figures/rafts_agr_effsize.tiff", plot = effsize_plot, width = 30, height = 10, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr

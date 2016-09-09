@@ -104,7 +104,7 @@ original_par <- par() #for resetting to original par after generating the plot i
 
 #+ load-data
 load("Data/merged_raft_cfu.RData")
-norm_data <- norm_data[sample_id %in% c("wt", "agrA_KO", "atl_KO", "hla_KO", "icaA_KO", "srtA_KO", "agrA_C123F_comp-20", "agrA_C123F_empty")] #filter
+norm_data <- norm_data[sample_id %in% c("wt", "agrA_KO", "atl_KO", "icaA_KO", "srtA_KO", "agrA_C123F_comp-20", "agrA_C123F_empty")] #filter
 
 #' 
 #' #Initial Visualize
@@ -209,7 +209,7 @@ effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
   geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
                                    xmax = CI.high)) +
   labs(x = expression(paste("Cohen's ", italic(d))), y = "Comparison") +
-  scale_y_discrete(labels = c(l8, l7, l6, l5, l4, l3, l2, l1)) +
+  scale_y_discrete(labels = c(l8, l7, l6, l5, l4, l2, l1)) +
   coord_cartesian(xlim = c(-1.5, 1.5)) +
 #  facet_grid(.~timepoint) +
   facet_grid(reformulate(blocking_factor, ".")) +

@@ -179,3 +179,78 @@ effsize_plot #plot
 
 #+ save-graph, eval=FALSE
 ggsave("Figures/rafts_agr_effsize.tiff", plot = effsize_plot, width = 30, height = 10, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
+
+#' #NHST
+#' 
+#' null hypothesis: the cfu from mutants are not different
+#' we are using the kruskall-wallis with dunn's post hoc on the untrasnformed data to understand which group are different from each other for a given timepoint
+#' 
+#+split
+splitted <- split(norm_data, norm_data[[blocking_factor]], drop = TRUE)
+
+#non parametric tests
+#+ Kruskall-Wallis
+map(splitted, function(x) kruskal.test(cfu ~ sample_id, data = x)) #Kruskall-Wallis test for a group with stochastic dominance
+
+#+ Post-hoc-pairwise, message=FALSE
+dunns_test <- dunn.test(splitted[[1]]$cfu, splitted[[1]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
+sig_matrix1 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 6, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix1 <- data.table(sig_matrix1, keep.rownames = TRUE)
+sig_matrix1[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
+
+dunns_test <- dunn.test(splitted[[2]]$cfu, splitted[[2]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
+sig_matrix2 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 6, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix2 <- data.table(sig_matrix2, keep.rownames = TRUE)
+sig_matrix2[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
+
+
+#'
+#' #Main figure
+#' 
+#' Labels
+#'
+
+#+ labels
+l1 <- "wild-type"
+l2 <- expression(italic(agrA[C123F]))
+l3 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
+l4 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
+
+
+facet1 <- data.frame(x = 1:4, y = 1:4, timepoint = "72 hours") #for the overlay later to allow for drawing stats comparison paths
+facet2 <- data.frame(x = 1:4, y = 1:4, timepoint = "120 hours") #for the overlay later to allow for drawing stats comparison paths
+comparisons <- list(c(1,2), c(1,3), c(1,4), c(3,4)) #state the comparisons
+p <- logscale_sigbars_generator(5e10, 2e9, 3, text_spacing = 1.5) # to calculate the postions for statisitical significance bars on a log scale
+
+#+ overview-plot, fig.width=7, fig.height=7
+main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
+  geom_boxplot(outlier.shape = NA, width = 0.5, alpha = 0.5) +
+  geom_point(position = position_jitter(width = 0.25), size = 0.3) +
+  scale_x_discrete(labels = c(l1, l2, l3, l4)) +
+  labs(x = " ", y = "CFU / raft") +
+  coord_cartesian(ylim = c(1e5, 1e11)) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  facet_wrap(~timepoint) +
+  theme_mod + 
+  #facet 1, labels are still manually added as is the level which subsets p in each path-text pair
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix1[[1,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix1[[2,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix1[[4,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[1,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[1,5],label=sig_matrix1[[6,5]]), data = facet1, parse = TRUE) +
+  # facet 2
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix2[[1,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix2[[2,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix2[[4,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[1,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[1,5],label=sig_matrix2[[6,5]]), data = facet2, parse = TRUE)
+main_fig
+
+#+ save-graph2, eval=FALSE
+ggsave("Figures/rafts_agr_cfu.tiff", plot = main_fig, width = 30, height = 25, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr

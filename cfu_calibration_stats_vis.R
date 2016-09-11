@@ -55,46 +55,12 @@ require(dplyr)
 require(tidyr)
 require(purrr)
 
-#+ functions, include=FALSE
-logscale_sigbars_generator <- function (max_draw_dim, min_draw_dim, number_bar_levels = 1, tick_size = 0.01, default_step = 1.5, text_spacing = 2) {
-  #someday it'll be nice to have some input verification
-  print("positions generated:", quote = FALSE)
-  print("the levels are counted from the bottom to top",quote = FALSE) 
-  print("p[level, 1:4] are the positions", quote = FALSE)
-  print("p[level, 5] contains the text position", quote = FALSE) #some guidance
-  range <- log(max_draw_dim) - log(min_draw_dim) #the range that the bars will be plotted in
-  tick_size_log <- log(max_draw_dim) * tick_size # the size of the downturned ticks
-  step <- ifelse((range / number_bar_levels) < default_step, (range / number_bar_levels), default_step) # the spacing between bars
-  p <- matrix(0,number_bar_levels, 5) # the matrix of the results
-  for (i in 1:number_bar_levels) {
-    bar_position <- log(min_draw_dim) + (step*i)
-    tick_postion <- bar_position - tick_size_log
-    text_position <- bar_position + (text_spacing * tick_size_log)
-    p[i,] <- as.numeric(c(exp(tick_postion), exp(bar_position), exp(bar_position),exp(tick_postion), exp(text_position)))
-  } #make it
-  return(p)
-}
+#+ functions
+source("sig_bars_generator.R")
+source("numeric_to_label.R")
 
-numeric_to_label <- function (numeric, prefix = "", precision = 3, round_method = floor) {
-  value <- as.integer(numeric)
-  exponent <- round_method(log10(numeric))
-  number <- signif(numeric * 10^(exponent * -1), digits = precision)
-  label <- paste0(prefix, number, "%*%10^{", exponent, "}")
-  return(label)
-}
-
-#+ style, inlcude=FALSE
-theme_mod <- theme_bw() +
-  theme(text = element_text(size = 16),
-        axis.ticks.y = element_blank(),
-        axis.ticks.x = element_blank())
-#and some xtable formatting options too
-italic <- function(x){
-  paste0('{\\emph{', x, '}}')
-}
-bold <- function(x){
-  paste0('{\\bfseries ', x, '}')
-}
+#+ style
+source("visual_formatting.R")
 
 #+ Session-info
 sessionInfo() #for reproducibility
@@ -274,9 +240,9 @@ sig_matrix1 <- norm_data %>%
   map(function (x) cbind(x, plabel = numeric_to_label(x$padjusted, prefix = "p==")))
 
 #+ labels-setup
-label1 <- "13 CFU"
-label2 <- "156 CFU"
-label3 <- "1680 CFU"
+label1 <- "13"
+label2 <- "156"
+label3 <- "1680"
 #for the overlay layer to allow for drawing stats comparison paths, one df for each facet
 facet1<- data.frame(x = 1:4, y = 1:4, timepoint = "3.5 hours") 
 facet2 <- data.frame(x = 1:4, y = 1:4, timepoint = "24 hours") 
@@ -285,7 +251,7 @@ facet4 <- data.frame(x = 1:4, y = 1:4, timepoint = "120 hours")
 #state the comparisons
 comparisons <- list(c(1,1.9), c(2.1,3), c(1,3))
 # to calculate the postions for statisitical significance bars o a log scale
-p <- logscale_sigbars_generator(1e11, 9e8, 2)
+p <- logscale_sigbars_generator(1e11, 2e8, 3, default_step = 2)
 
 #+ overview-plot, fig.width=7, fig.height=7
 cfu_calibration <- ggplot(norm_data, aes(CFU_delivered, cfu)) +
@@ -300,17 +266,17 @@ cfu_calibration <- ggplot(norm_data, aes(CFU_delivered, cfu)) +
   #facet 1
   geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
   geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix1[['3.5 hours']][1,4]), data = facet1, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[1,1:4]), data = facet1) +
-  geom_text(aes(x=median(comparisons[[2]]),y=p[1,5],label=sig_matrix1[['3.5 hours']][3,4]), data = facet1, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[2,1:4]), data = facet1) +
-  geom_text(aes(x=median(comparisons[[3]]),y=p[2,5],label=sig_matrix1[['3.5 hours']][2,4]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix1[['3.5 hours']][3,4]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix1[['3.5 hours']][2,4]), data = facet1, parse = TRUE) +
   # facet 2
   geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet2) +
   geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix1[['24 hours']][1,4]), data = facet2, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[1,1:4]), data = facet2) +
-  geom_text(aes(x=median(comparisons[[2]]),y=p[1,5],label=sig_matrix1[['24 hours']][3,4]), data = facet2, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[2,1:4]), data = facet2) +
-  geom_text(aes(x=median(comparisons[[3]]),y=p[2,5],label=sig_matrix1[['24 hours']][2,4]), data = facet2, parse = TRUE)
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix1[['24 hours']][3,4]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix1[['24 hours']][2,4]), data = facet2, parse = TRUE)
 cfu_calibration
 
 #+ save-graph2, eval=FALSE

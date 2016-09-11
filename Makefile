@@ -13,6 +13,16 @@ crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
 	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm crystal_violet_stats_vis.Rmd
 
+crystal_violet_figures:
+	Rscript crystal_violet_stats_vis.R
+	rm Rplots.pdf
+	echo "$@ created, it is a large file..."
+
+crystal_violet_agr_figures:
+	Rscript crystal_violet_agr_stats_vis.R
+	rm Rplots.pdf
+	echo "$@ created, it is a large file..."
+
 Data/hla_tidy.RData: 
 	Rscript hla_tidy.R
 	rm Rplots.pdf
@@ -34,9 +44,15 @@ rafts_agr_stats_vis.html:
 	rm rafts_agr_stats_vis.Rmd
 
 rafts_mutants_figures:
-	Rscript rafts_mutants_stats_vis.R
-	rm Rplots.pdf
-	echo $@ created, it is a large file...
+	Rscript rafts_mutants_stats_vis.R;
+	rm Rplots.pdf;
+	echo "$@ created, it is a large file..."
+
+rafts_agr_figures:
+	Rscript rafts_agr_stats_vis.R;
+	rm Rplots.pdf;
+	echo "$@ created, it is a large file..."
+
 
 cfu_calibration_datawrangle.html:
 	Rscript -e "rmarkdown::render(knitr::spin('cfu_calibration_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
@@ -45,11 +61,28 @@ cfu_calibration_datawrangle.html:
 cfu_calibration_figures:
 	Rscript cfu_calibration_stats_vis.R
 	rm Rplots.pdf
-	echo $@ created, it is a large file...
+	echo "$@ created, it is a large file..."
 
-fig1.pdf: cfu_calibration_figures
-	inkscape Figures/Figure1.svg -A Figures/for_publication/fig1.pdf;
+Figures/fig1.pdf: cfu_calibration_figures
+	inkscape Figures/Figure1.svg -A $@;
 	rm Figures/*.tiff
+
+Figures/fig2.pdf:
+	inkscape Figures/Figure2.svg -A $@;
+	rm Figures/*.tiff
+
+Figures/fig3.pdf: rafts_agr_figures
+	inkscape Figures/Figure3.svg -A $@;
+	rm Figures/*.tiff
+
+Figures/fig4.pdf: crystal_violet_agr_figures
+	inkscape Figures/Figure4.svg -A $@;
+	rm Figures/*.tiff
+
+Figures/%.pdfcrop: Figures/%.pdf
+	pdfcrop $< $<;
+	echo "$@ has created and cropped the figure"
+
 
 #these were made later with moe understanding
 22251_effsize.pdf:
@@ -67,10 +100,6 @@ allfigs: mainfigs suppfigs
 mainfigs: fig1_characterize_model.pdf fig2_SEM.pdf fig3_growth.pdf fig4_biofilm.pdf
 
 suppfigs: figS1_experimental_setup.pdf figS2_sonicated.pdf figS3_22251.pdf figS4_newman.pdf figS5_PBS.pdf
-
-crystal_violet_figures:
-	Rscript crystal_violet_stats_vis.R;
-	echo $@ created, it is a large file...
 
 test_fig1.pdf: test.tiff
 	inkscape Figures/test_inkscape.svg -A Figures/for_publication/test_fig1.pdf;

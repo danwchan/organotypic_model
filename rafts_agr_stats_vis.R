@@ -232,6 +232,7 @@ main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   facet_wrap(~timepoint) +
   theme_mod + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   #facet 1, labels are still manually added as is the level which subsets p in each path-text pair
   geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
   geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix1[[1,5]]), data = facet1, parse = TRUE) +

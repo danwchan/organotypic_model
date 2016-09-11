@@ -1,3 +1,5 @@
+TEXFILE = second_draft
+
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
 analysis_html_documentation: *.html
 
@@ -79,10 +81,37 @@ Figures/fig4.pdf: crystal_violet_agr_figures
 	inkscape Figures/Figure4.svg -A $@;
 	rm Figures/*.tiff
 
+Figures/figS1.pdf:
+	inkscape Figures/Supplement_figure1.svg -A $@
+
+Figures/figS2.pdf:
+	inkscape Figures/Supplement_figure2.svg -A $@
+
+Figures/figS3.pdf: rafts_mutants_figures
+	inkscape Figures/Supplement_figure3.svg -A $@;
+	rm Figures/*.tiff
+
+Figures/figS4.pdf:
+	inkscape Figures/Supplement_figure4.svg -A $@
+
+Figures/figS5.pdf:
+	inkscape Figures/Supplement_figure5.svg -A $@
+
+Figures/figS6.pdf: crystal_violet_figures
+	inkscape Figures/Supplement_figure6.svg -A $@;
+	rm Figures/*.tiff
+
 Figures/%.pdfcrop: Figures/%.pdf
 	pdfcrop $< $<;
-	echo "$@ has created and cropped the figure"
+	touch $@;
+	echo "$@ has created and cropped the figure, .pdfcrop token created"
 
+$(TEXFILE).pdf: $(TEXFILE).tex
+	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	bibtex $(TEXFILE).aux;
+	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	rm -v $(TEXFILE).blg $(TEXFILE).out $(TEXFILE).aux $(TEXFILE).bbl $(TEXFILE).log
 
 #these were made later with moe understanding
 22251_effsize.pdf:

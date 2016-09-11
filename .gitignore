@@ -6,6 +6,8 @@
 *.exe
 *.o
 *.so
+#these are usually large paper files or figures
+*.pdf
 
 # Packages #
 ############

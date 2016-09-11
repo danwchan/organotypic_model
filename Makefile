@@ -6,11 +6,11 @@ Data/crystal_violet.RData:
 	rm Rplots.pdf
 
 crystal_violet_datawrangle.html:
-	Rscript -e rmarkdown::render(knitr::spin("crystal_violet_datawrangle.R", knit = FALSE), output_dir = "analysis_html");
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm crystal_violet_datawrangle.Rmd
 
 crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
-	Rscript -e rmarkdown::render(knitr::spin("crystal_violet_stats_vis.R", knit = FALSE), output_dir = "analysis_html");
+	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm crystal_violet_stats_vis.Rmd
 
 Data/hla_tidy.RData: 
@@ -22,12 +22,16 @@ Data/merged_raft_cfu.RData:
 	rm Rplots.pdf
 
 rafts_mutants_datawrangle.html:
-	Rscript -e rmarkdown::render(knitr::spin("rafts_mutants_datawrangle.R", knit = FALSE), output_dir = "analysis_html");
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm rafts_mutants_datawrangle.Rmd
 
 rafts_mutants_stats_vis.html: Data/hla_tidy.RData Data/merged_raft_cfu.RData
-	Rscript -e rmarkdown::render(knitr::spin("rafts_mutants_stats_vis.R", knit = FALSE), output_dir = "analysis_html");
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_mutants_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm rafts_mutants_stats_vis.Rmd
+
+rafts_agr_stats_vis.html:
+	Rscript -e "rmarkdown::render(knitr::spin('rafts_agr_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
+	rm rafts_agr_stats_vis.Rmd
 
 rafts_mutants_figures:
 	Rscript rafts_mutants_stats_vis.R
@@ -35,7 +39,7 @@ rafts_mutants_figures:
 	echo $@ created, it is a large file...
 
 cfu_calibration_datawrangle.html:
-	Rscript -e rmarkdown::render(knitr::spin("cfu_calibration_datawrangle.R", knit = FALSE), output_dir = "analysis_html");
+	Rscript -e "rmarkdown::render(knitr::spin('cfu_calibration_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm cfu_calibration_datawrangle.Rmd
 
 cfu_calibration_figures:
@@ -49,10 +53,10 @@ fig1.pdf: cfu_calibration_figures
 
 #these were made later with moe understanding
 22251_effsize.pdf:
-	Rscript -e rmarkdown::render(knitr::spin("./Figures/160606_clinical_strain_panel/160608_22251_effsize.R", knit = FALSE))
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160606_clinical_strain_panel/160608_22251_effsize.R', knit = FALSE))"
 
 22251_agrA_comp.pdf:
-	Rscript -e rmarkdown::render(knitr::spin("./Figures/160606_clinical_strain_panel/160608_22251_agrA_comp.R", knit = FALSE))
+	Rscript -e "rmarkdown::render(knitr::spin('./Figures/160606_clinical_strain_panel/160608_22251_agrA_comp.R', knit = FALSE))"
 
 #export svg inkscape files as pdfs for latex import
 # why am I exporting my figure as .tiff files then deleting them?:
@@ -108,7 +112,7 @@ figures_proofing.pdf: allfigs
 	cd ./Figures
 	pdflatex ./Figures/figures_proofing.tex
 
-#make references for pasting into plos latex template since they don"t support .bib file submission
+#make references for pasting into plos latex template since they don't support .bib file submission
 make_ref_plos:
 	latex first_draft.tex
 	bibtex first_draft.aux

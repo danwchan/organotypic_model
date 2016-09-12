@@ -106,20 +106,15 @@ Figures/%.pdfcrop: Figures/%.pdf
 	touch $@;
 	echo "$@ has created and cropped the figure, .pdfcrop token created"
 
+allfigs: mainfigs suppfigs
+
+mainfigs: Figures/fig1.pdf Figures/fig2.pdf Figures/fig3.pdf Figures/fig4.pdf
+
+suppfigs: Figures/figS1.pdf Figures/figS2.pdf Figures/figS3.pdf Figures/figS4.pdf Figures/figS5.pdf Figures/figS6.pdf
+
 $(TEXFILE).pdf: $(TEXFILE).tex
 	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
 	bibtex $(TEXFILE).aux;
 	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
 	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
 	rm -v $(TEXFILE).blg $(TEXFILE).out $(TEXFILE).aux $(TEXFILE).bbl $(TEXFILE).log
-
-
-#export svg inkscape files as pdfs for latex import
-# why am I exporting my figure as .tiff files then deleting them?:
-# because inkscape imports vector based things as a collection of objects that do not update dynamically in the inkscape file
-# since I want dynamiclly updating figures and I want high quality I must export graphs as
-allfigs: mainfigs suppfigs
-
-mainfigs: fig1_characterize_model.pdf fig2_SEM.pdf fig3_growth.pdf fig4_biofilm.pdf
-
-suppfigs: figS1_experimental_setup.pdf figS2_sonicated.pdf figS3_22251.pdf figS4_newman.pdf figS5_PBS.pdf

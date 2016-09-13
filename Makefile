@@ -16,12 +16,12 @@ crystal_violet_stats_vis.html: Data/crystal_violet.Rdata
 	Rscript -e "rmarkdown::render(knitr::spin('crystal_violet_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm crystal_violet_stats_vis.Rmd
 
-crystal_violet_figures: Data/crystal_violet.Rdata
+crystal_violet_figures:
 	Rscript crystal_violet_stats_vis.R
 	rm Rplots.pdf
 	echo "$@ created, it is a large file..."
 
-crystal_violet_agr_figures: Data/crystal_violet.Rdata
+crystal_violet_agr_figures:
 	Rscript crystal_violet_agr_stats_vis.R
 	rm Rplots.pdf
 	echo "$@ created, it is a large file..."
@@ -46,12 +46,12 @@ rafts_agr_stats_vis.html: Data/merged_raft_cfu.RData
 	Rscript -e "rmarkdown::render(knitr::spin('rafts_agr_stats_vis.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm rafts_agr_stats_vis.Rmd
 
-rafts_mutants_figures: Data/merged_raft_cfu.RData
+rafts_mutants_figures:
 	Rscript rafts_mutants_stats_vis.R;
 	rm Rplots.pdf;
 	echo "$@ created, it is a large file..."
 
-rafts_agr_figures: Data/merged_raft_cfu.RData
+rafts_agr_figures:
 	Rscript rafts_agr_stats_vis.R;
 	rm Rplots.pdf;
 	echo "$@ created, it is a large file..."
@@ -70,7 +70,7 @@ cfu_calibration_datawrangle.html:
 	Rscript -e "rmarkdown::render(knitr::spin('cfu_calibration_datawrangle.R', knit = FALSE), output_dir = 'analysis_html')";
 	rm cfu_calibration_datawrangle.Rmd
 
-cfu_calibration_figures: Data/cfu_calibration.RData
+cfu_calibration_figures:
 	Rscript cfu_calibration_stats_vis.R
 	rm Rplots.pdf
 	echo "$@ created, it is a large file..."
@@ -117,12 +117,15 @@ Figures/%.pdfcrop: Figures/%.pdf
 	echo "$@ has created and cropped the figure, .pdfcrop token created"
 
 allfigs: mainfigs suppfigs
+	touch $@;
 
 mainfigs: Figures/fig1.pdf Figures/fig2.pdf Figures/fig3.pdf Figures/fig4.pdf
+	touch $@;
 
 suppfigs: Figures/figS1.pdf Figures/figS2.pdf Figures/figS3.pdf Figures/figS4.pdf Figures/figS5.pdf Figures/figS6.pdf
+	touch $@;
 
-$(TEXFILE).pdf: $(TEXFILE).tex allfigs
+$(TEXFILE).pdf: $(TEXFILE).tex
 	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
 	bibtex $(TEXFILE).aux;
 	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;

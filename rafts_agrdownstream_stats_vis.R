@@ -1,12 +1,12 @@
 #' ---
-#' title: "merged raft cfu assays, downstream for publication, analyize and visualize the data"
+#' title: "downstream agr effectors subset cfu assays for publication, analyize and visualize the data"
 #'output:
 #'  html_document:
 #'    toc: true
 #'    theme: united
 #' ---
 
-#/*    Analysis script for statistics and visualization of organotypic raft cfu assay*/
+#/*    Analysis script for statistics and visualization of organotypic raft cfu assay , downstream agr effectors subset*/
 #/*    Copyright (C) 2016  Daniel Chan*/
 
 #/*    This program is free software: you can redistribute it and/or modify*/
@@ -72,8 +72,12 @@ original_par <- par() #for resetting to original par after generating the plot i
 #+ load-data
 load("Data/merged_raft_cfu.RData")
 
-date_index <- norm_data[sample_id %in% c("atl_KO", "icaA_KO", "srtA_KO"),unique(date)] #find all experiments with the agr sample
-norm_data <- norm_data[date %in% date_index][sample_id %in% c("wt", "atl_KO", "icaA_KO", "srtA_KO")] #extract them from the data with thier matched wt
+date_index <- norm_data[sample_id %in% c("3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta"),unique(date)] #find all experiments with the agr sample
+norm_data <- norm_data[date %in% date_index][sample_id %in% c("wt", "3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta")] #extract them from the data with thier matched wt
+
+norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c("wt", "hla_KO", "3psm_KO", "d3PSM_empty", "d3PSM_alpha", "d3PSM_delta")])
+norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
+
 
 #' 
 #' #Initial Visualize
@@ -86,7 +90,7 @@ data_summary <- norm_data %>%
   summarise(
     mean = mean(cfu_log, na.rm = TRUE), # means comparison
     sdev = sd(cfu_log, na.rm = TRUE),
-    ci_lower = t.test(cfu_log)$conf.int[1], #95% confidence intervals CANT DO IT CAUSE THE DATA?
+    ci_lower = t.test(cfu_log)$conf.int[1],
     ci_upper = t.test(cfu_log)$conf.int[2])
 data_summary
 
@@ -96,7 +100,7 @@ data_summary_plot <- ggplot(data_summary, aes(sample_id, mean, ymin = ci_lower, 
   geom_bar(aes(fill = sample_id), stat="identity", position = pos, width = 0.9) +
   theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
   geom_errorbar(aes(fill = sample_id), width = 0.2, position = pos)
-data_summary_plot
+#data_summary_plot
 
 #' 
 #' #Set values
@@ -114,9 +118,6 @@ blocking_factor <- "timepoint"
 test_factor1 <- "sample_id"
 set_data <- transformed_data[[2]]
 set_test <- "metric" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
-
-norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c(5,2,3,4)])
-norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
 
 #'
 #' #Effect Size

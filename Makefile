@@ -26,11 +26,11 @@ crystal_violet_agr_figures:
 	rm Rplots.pdf
 	echo "$@ created, it is a large file..."
 
-Data/hla_tidy.RData: Data/hla/*
+Data/hla_psm_tidy.RData: Data/hla/*
 	Rscript hla_tidy.R
 	rm Rplots.pdf
 
-Data/merged_raft_cfu.RData: Data/hla_tidy.RData Data/psm_module/* Data/rafts_cfu_merged/*
+Data/merged_raft_cfu.RData: Data/hla_psm_tidy.RData Data/psm_module/* Data/rafts_cfu_merged/*
 	Rscript rafts_mutants_datawrangle.R
 	rm Rplots.pdf
 

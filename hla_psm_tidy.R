@@ -54,60 +54,53 @@ sessionInfo() #for reproducibility
 
 #+ some-other-options
 original_par <- par() #for resetting to original par after generating the plot in the null device
-#setwd("/home/danwchan/Documents/Organotypic_Model/160721_") why is this bad again? set the working directory to this scripts location (don't separate me away)
 
 #' ##Data import and processing: 
 #' 
-#+ first-mover
-tablename <- "Data/hla/140516_WPH_test.csv"
-#'
 #' copy and pasted with modification from my very first R scripts :P
-#'   
-#+ import-process-data,
-eval(parse(text=readLines(tablename, n=1))) #extract the information in the old testnames comment
-expdata <- read.table(tablename, header=TRUE, sep=',', skip=1) #read in the tab delimited
-timepoints <- levels(as.factor(expdata$Time))
-datacols <- names(expdata)
-for (i in 1:length(testnames)) {
-  count <- paste('test', as.character(i), sep='')
-  dilution <- paste('test', as.character(i), '.D', sep='')
-  expdata[[testnames[i]]] <- expdata[[count]] * expdata[[dilution]] * 50
-}
-melted_data <- melt(expdata[c('Time', testnames)], id.vars='Time', na.rm=TRUE, variable.name = "sample_id", value.name = "cfu") #reshape the data
+#'
 
-#+ bind
+#+ importbind1
+tablename <- "Data/hla/140516_WPH_test.csv"
+source("old_import_chunk.R")
+#' data from 
+{{tablename}}
+#' imported into melted_data, bind to working data...
 str(melted_data)
 working_data <- data.frame(melted_data, date = "140516")
+
+#+ importbind2
 tablename <- "Data/hla/140711_WPH_2nd.csv" #second table to import
-
-#+ import2,echo=FALSE, ref.label="import-process-data"
-
-#+ bind-again
+source("old_import_chunk.R")
 #' import2 chunk imported 
 {{tablename}}
-#' 
 str(melted_data)
 working_data <- rbind(working_data, data.frame(melted_data, date = "140711"))
+
+#+ importbind3
 tablename <- "Data/hla/141112_WHPacomp.csv" #3rd table to import
-
-#+ import3, echo=FALSE, ref.label="import-process-data"
-
-#+ bind-again2
-#' import3 chunk imported 
+source("old_import_chunk.R")
+#' data from 
 {{tablename}}
-#' 
+#' imported into melted_data, bind to working data...
 str(melted_data)
 working_data <- rbind(working_data, data.frame(melted_data, date = "141112"))
+
+#+ importbind4
 tablename <- "Data/hla/150123_WHPcomp.csv" #last table to import
-
-#+ import4, echo=FALSE, ref.label="import-process-data"
-
-#+ bind-last
-#' import3 chunk imported 
+source("old_import_chunk.R")
+#' data from 
 {{tablename}}
-#' 
-str(melted_data)
+#' imported into melted_data, bind to working data...
 working_data <- rbind(working_data, data.frame(melted_data, date = "150123"))
+
+#+ importbind5
+tablename <- "Data/hla/150122_WPcomp.csv" #last table to import
+source("old_import_chunk.R")
+#' data from 
+{{tablename}}
+#' imported into melted_data, bind to working data...
+working_data <- rbind(working_data, data.frame(melted_data, date = "150122"))
 
 #+ process-data
 working_data <- working_data %>%

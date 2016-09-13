@@ -115,7 +115,7 @@ test_factor1 <- "sample_id"
 set_data <- transformed_data[[2]]
 set_test <- "metric" #ordinal <- non-paramtric, cliff's D, metric <- parametric, cohen's D
 
-norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c(5,2,3,4)])
+norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c("wt", "atl_KO", "icaA_KO", "srtA_KO")])
 norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
 
 #'

@@ -204,7 +204,7 @@ l3 <- expression(italic(Delta*atl))
 l4 <- expression(italic(paste("icaA", ":", ":", "erm")))
 l5 <- expression(italic(paste("srt", ":", ":", "erm")))
 facet1 <- data.frame(x = 1:4, y = 1:4) #for the overlay later to allow for drawing stats comparison paths
-norm_data$simple_id <- factor(norm_data$simple_id, levels(norm_data$simple_id)[c(17,6,11,14)])
+norm_data$simple_id <- factor(norm_data$simple_id, levels(norm_data$simple_id)[c("wt_NA", "atl_", "icaA_", "srtA_")])
 comparisons <- list(c(1,2), c(1,3), c(1,4)) #state the comparisons
 
 #+ overview-plot, fig.width=7, fig.height=7

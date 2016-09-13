@@ -104,7 +104,7 @@ working_data <- rbind(working_data, data.frame(melted_data, date = "150122"))
 
 #+ process-data
 working_data <- working_data %>%
-  filter(sample_id == "WT" | sample_id == "hla") %>%
+  filter(sample_id == "WT" | sample_id == "hla" | sample_id == "PSM") %>% #vector used in these experiment is pTX isolated from strains from M.Otto
   filter(Time == 72 | Time == 120) %>%
   transform(timepoint = as.factor(Time)) %>% #make timepoint and CFU_delivered a factor
   mutate(id_merge = as.factor(paste(timepoint, sample_id, sep = '_'))) %>% #add an id column with all experimental variables
@@ -162,5 +162,5 @@ hla_tidy <- data.table(working_data)
 #column normalization
 hla_tidy[, Time := NULL][, ':=' (count = NA, dilution = NA, sample_strain = as.factor("LAC"), notes = "", exp_status = "", double_factor = "")]
 #label normalization
-hla_tidy[sample_id == "hla", sample_id := "hla_KO"][sample_id == "WT", sample_id := "wt"]
-save(hla_tidy, file = "Data/hla_tidy.RData")
+hla_tidy[sample_id == "hla", sample_id := "hla_KO"][sample_id == "WT", sample_id := "wt"][sample_id == "PSM", sample_id := "3psm_KO"]
+save(hla_tidy, file = "Data/hla_psm_tidy.RData")

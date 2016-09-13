@@ -97,7 +97,7 @@ working_data <- rbind(raw_data, raw_data2, raw_data3) %>%
 str(working_data)
 
 # append hla data from R.data file
-load("Data/hla_tidy.RData")
+load("Data/hla_psm_tidy.RData")
 working_data <- rbind(working_data, hla_tidy)
 working_data$sample_id <- factor(working_data$sample_id)
 

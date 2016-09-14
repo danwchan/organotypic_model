@@ -72,8 +72,8 @@ original_par <- par() #for resetting to original par after generating the plot i
 #+ load-data
 load("Data/merged_raft_cfu.RData")
 
-date_index <- norm_data[sample_id %in% c("3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta"),unique(date)] #find all experiments with the agr sample
-norm_data <- norm_data[date %in% date_index][sample_id %in% c("wt", "3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta")] #extract them from the data with thier matched wt
+date_index <- norm_data[sample_id %in% c("3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta", "d3PSM_empty"),unique(date)] #find all experiments with the agr sample
+norm_data <- norm_data[date %in% date_index][sample_id %in% c("wt", "3psm_KO", "d3PSM_empty", "hla_KO", "d3PSM_alpha", "d3PSM_delta")] #extract them from the data with thier matched wt
 
 norm_data$sample_id <- factor(norm_data$sample_id, c("wt", "hla_KO", "3psm_KO", "d3PSM_empty", "d3PSM_alpha", "d3PSM_delta"))
 norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
@@ -100,7 +100,7 @@ data_summary_plot <- ggplot(data_summary, aes(sample_id, mean, ymin = ci_lower, 
   geom_bar(aes(fill = sample_id), stat="identity", position = pos, width = 0.9) +
   theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
   geom_errorbar(aes(fill = sample_id), width = 0.2, position = pos)
-#data_summary_plot
+data_summary_plot
 
 #' 
 #' #Set values
@@ -159,18 +159,20 @@ orddom_summary <- norm_data %>%
   as.data.frame() %>%
   filter(Var2 == set_test)
 
-#test case for an issue: Error in combn(unique(sort(x[[test_factor1]])), 2) : n < m
-blocked_data <- split(norm_data, norm_data[[blocking_factor]], drop = TRUE)
-map(blocked_data, function(x) combn(unique(sort(x[[test_factor1]])), 2))
+#test case for an issue: Error in combn(unique(sort(x[[test_factor1]])), 2) : n < m, the issue was an upstream fix :P
+#blocked_data <- split(norm_data, norm_data[[blocking_factor]], drop = TRUE)
+#map(blocked_data, function(x) combn(unique(sort(x[[test_factor1]])), 2))
 
 #+ comparisons-label
-l5 <- expression(atop("wild-type vs. ", italic(paste("srtA", ":", ":", "erm"))))
-l4 <- expression(atop("wild-type vs. ", italic(paste("icaA", ":", ":", "erm"))))
-l2 <- expression(atop("wild-type vs. ", italic(Delta*atl)))
+l1 <- expression(atop("wild-type vs. ", italic(paste("hla", ":", ":", "erm"))))
+l2 <- expression(atop("wild-type vs. ", paste(Delta, "3PSM")))
+l3 <- expression(atop("wild-type vs. ", paste(Delta, "3PSM + pOS1 empty")))
+l4 <- expression(atop("wild-type vs. ", paste(Delta, "3PSM + pOS1 ", italic(psm*alpha))))
+l5 <- expression(atop("wild-type vs. ", paste(Delta, "3PSM + pOS1 ", delta, "-toxin")))
 
 
 #+ filtered-plot
-orddom_sliced <- slice(orddom_summary, c(7:12)) #filter
+orddom_sliced <- slice(orddom_summary, c(21:30)) #filter
 orddom_sliced$timepoint <- factor(orddom_sliced$timepoint, levels(orddom_sliced$timepoint)[c(2,1)]) #reorder factor
 
 effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
@@ -179,15 +181,15 @@ effsize_plot <- ggplot(orddom_sliced, aes(delta, comparison)) +
   geom_errorbarh(height = 0.2, aes(xmin = CI.low, 
                                    xmax = CI.high)) +
   labs(x = expression(paste("Cohen's ", italic(d))), y = "Comparison") +
-  scale_y_discrete(labels = c(l5, l4, l2)) +
-  coord_cartesian(xlim = c(-1.5, 1.5)) +
+  scale_y_discrete(labels = c(l5, l4, l3, l2, l1)) +
+  coord_cartesian(xlim = c(-2, 2)) +
 #  facet_grid(.~timepoint) +
   facet_grid(reformulate(blocking_factor, ".")) +
   theme_mod
 effsize_plot #plot
 
 #+ save-graph, eval=FALSE
-ggsave("Figures/rafts_mutants_supp_effsize.tiff", plot = effsize_plot, width = 30, height = 10, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
+ggsave("Figures/rafts_agrdownstream_effsize.tiff", plot = effsize_plot, width = 30, height = 10, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
 
 #' #NHST
 #' 
@@ -203,12 +205,12 @@ map(splitted, function(x) kruskal.test(cfu ~ sample_id, data = x)) #Kruskall-Wal
 
 #+ Post-hoc-pairwise, message=FALSE
 dunns_test <- dunn.test(splitted[[1]]$cfu, splitted[[1]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-sig_matrix1 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 6, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix1 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 15, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
 sig_matrix1 <- data.table(sig_matrix1, keep.rownames = TRUE)
 sig_matrix1[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
 
 dunns_test <- dunn.test(splitted[[2]]$cfu, splitted[[2]]$sample_id, method = 'bonferroni') #pairwise comparison if Kruskall-Wallis is rejected using Dunn's Z statistic
-sig_matrix2 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 6, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
+sig_matrix2 <- matrix(c(dunns_test$Z, dunns_test$P, dunns_test$P.adjusted), 15, 3, dimnames = list(dunns_test$comparisons, c("Z", "pvalue", "padjusted")))
 sig_matrix2 <- data.table(sig_matrix2, keep.rownames = TRUE)
 sig_matrix2[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
 
@@ -220,66 +222,64 @@ sig_matrix2[,plabel := numeric_to_label(padjusted, prefix = "p=="),]
 
 #+ labels
 l1 <- "wild-type"
-l2 <- expression(italic(agrA[C123F]))
-l3 <- expression(italic(Delta*atl))
-l4 <- expression(italic(paste("hlaA", ":", ":", "erm")))
-l5 <- expression(italic(paste("icaA", ":", ":", "erm")))
-l6 <- expression(italic(paste("srt", ":", ":", "erm")))
-l7 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
-l8 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
+l2 <- expression(italic(paste("hla", ":", ":", "erm")))
+l3 <- expression(paste(Delta, "3PSM"))
+l4 <- expression(paste(Delta, "3PSM + pOS1 empty"))
+l5 <- expression(paste(Delta, "3PSM + pOS1 ", italic(psm*alpha)))
+l6 <- expression(paste(Delta, "3PSM + pOS1 ", delta, "-toxin"))
 
 facet1 <- data.frame(x = 1:4, y = 1:4, timepoint = "72 hours") #for the overlay later to allow for drawing stats comparison paths
 facet2 <- data.frame(x = 1:4, y = 1:4, timepoint = "120 hours") #for the overlay later to allow for drawing stats comparison paths
-comparisons <- list(c(1,2), c(1,3), c(1,4)) #state the comparisons
-p <- logscale_sigbars_generator(0.5e10, 1e9, 3, text_spacing = 1.2) # to calculate the postions for statisitical significance bars on a log scale
+comparisons <- list(c(1,2), c(1,3), c(1,4), c(1,5), c(1,6), c(4,5), c(4,6)) #state the comparisons
+p <- logscale_sigbars_generator(5e9, 1e11, 5, text_spacing = 1.2) # to calculate the postions for statisitical significance bars on a log scale
 
 #+ overview-plot, fig.width=7, fig.height=7
 main_fig <- ggplot(norm_data, aes(sample_id, cfu)) +
   geom_boxplot(outlier.shape = NA, width = 0.5, alpha = 0.5) +
   geom_point(position = position_jitter(width = 0.25), size = 0.3) +
-  scale_x_discrete(labels = c(l1, l3, l5, l6)) +
+  scale_x_discrete(labels = c(l1, l2, l3, l4, l5, l6)) +
   labs(x = " ", y = "CFU / raft") +
-  coord_cartesian(ylim = c(1e6, 1e10)) +
+  coord_cartesian(ylim = c(1e6, 1e11)) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   facet_wrap(~timepoint) +
   theme_mod + 
-#  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   #facet 1, labels are still manually added as is the level which subsets p in each path-text pair
-  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet1) +
-  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix1[[1,5]]), data = facet1, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet1) +
-  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix1[[2,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[5,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[5,5],label=sig_matrix1[[1,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[4,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[4,5],label=sig_matrix1[[2,5]]), data = facet1, parse = TRUE) +
   geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet1) +
   geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix1[[4,5]]), data = facet1, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[4,1:4]), data = facet1) +
-#  geom_text(aes(x=median(comparisons[[4]]),y=p[4,5],label=sig_matrix1[[7,5]]), data = facet1, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet1) +
-#  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label=sig_matrix1[[11,5]]), data = facet1, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[6]], each = 2),y=p[6,1:4]), data = facet1) +
-#  geom_text(aes(x=median(comparisons[[6]]),y=p[6,5],label=sig_matrix1[[22,5]]), data = facet1, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[7]], each = 2),y=p[7,1:4]), data = facet1) +
-#  geom_text(aes(x=median(comparisons[[7]]),y=p[7,5],label=sig_matrix1[[16,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[2,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[2,5],label=sig_matrix1[[7,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[1,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[5]]),y=p[1,5],label=sig_matrix1[[11,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[6]], each = 2),y=p[5,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[6]]),y=p[5,5],label=sig_matrix1[[10,5]]), data = facet1, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[7]], each = 2),y=p[4,1:4]), data = facet1) +
+  geom_text(aes(x=median(comparisons[[7]]),y=p[4,5],label=sig_matrix1[[14,5]]), data = facet1, parse = TRUE) +
 #  geom_path(aes(x=rep(comparisons[[8]], each = 2),y=p[1,1:4]), data = facet1) +
 #  geom_text(aes(x=median(comparisons[[8]]),y=p[1,5],label=sig_matrix1[[28,5]]), data = facet1, parse = TRUE) +
   # facet 2
-  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[1,1:4]), data = facet2) +
-  geom_text(aes(x=median(comparisons[[1]]),y=p[1,5],label=sig_matrix2[[1,5]]), data = facet2, parse = TRUE) +
-  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[2,1:4]), data = facet2) +
-  geom_text(aes(x=median(comparisons[[2]]),y=p[2,5],label=sig_matrix2[[2,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[1]], each = 2),y=p[5,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[1]]),y=p[5,5],label=sig_matrix2[[1,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[2]], each = 2),y=p[4,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[2]]),y=p[4,5],label=sig_matrix2[[2,5]]), data = facet2, parse = TRUE) +
   geom_path(aes(x=rep(comparisons[[3]], each = 2),y=p[3,1:4]), data = facet2) +
-  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix2[[4,5]]), data = facet2, parse = TRUE) #+
-#  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[4,1:4]), data = facet2) +
-#  geom_text(aes(x=median(comparisons[[4]]),y=p[4,5],label=sig_matrix2[[7,5]]), data = facet2, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[5,1:4]), data = facet2) +
-#  geom_text(aes(x=median(comparisons[[5]]),y=p[5,5],label=sig_matrix2[[11,5]]), data = facet2, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[6]], each = 2),y=p[6,1:4]), data = facet2) +
-#  geom_text(aes(x=median(comparisons[[6]]),y=p[6,5],label=sig_matrix2[[22,5]]), data = facet2, parse = TRUE) +
-#  geom_path(aes(x=rep(comparisons[[7]], each = 2),y=p[7,1:4]), data = facet2) +
-#  geom_text(aes(x=median(comparisons[[7]]),y=p[7,5],label=sig_matrix2[[16,5]]), data = facet2, parse = TRUE) +
+  geom_text(aes(x=median(comparisons[[3]]),y=p[3,5],label=sig_matrix2[[4,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[4]], each = 2),y=p[2,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[4]]),y=p[2,5],label=sig_matrix2[[7,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[5]], each = 2),y=p[1,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[5]]),y=p[1,5],label=sig_matrix2[[11,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[6]], each = 2),y=p[5,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[6]]),y=p[5,5],label=sig_matrix2[[10,5]]), data = facet2, parse = TRUE) +
+  geom_path(aes(x=rep(comparisons[[7]], each = 2),y=p[4,1:4]), data = facet2) +
+  geom_text(aes(x=median(comparisons[[7]]),y=p[4,5],label=sig_matrix2[[14,5]]), data = facet2, parse = TRUE)
 #  geom_path(aes(x=rep(comparisons[[8]], each = 2),y=p[1,1:4]), data = facet2) +
 #  geom_text(aes(x=median(comparisons[[8]]),y=p[1,5],label=sig_matrix2[[28,5]]), data = facet2, parse = TRUE)
 main_fig
 
 #+ save-graph2, eval=FALSE
-ggsave("Figures/rafts_mutants_supp_cfu.tiff", plot = main_fig, width = 30, height = 25, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
+ggsave("Figures/rafts_agrdownstream_cfu.tiff", plot = main_fig, width = 30, height = 25, units = "cm", dpi = 1200) #this code is only evaluate when the script us run ourside of knitr
 

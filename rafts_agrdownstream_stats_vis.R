@@ -75,7 +75,7 @@ load("Data/merged_raft_cfu.RData")
 date_index <- norm_data[sample_id %in% c("3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta"),unique(date)] #find all experiments with the agr sample
 norm_data <- norm_data[date %in% date_index][sample_id %in% c("wt", "3psm_KO", "hla_KO", "d3PSM_alpha", "d3PSM_delta")] #extract them from the data with thier matched wt
 
-norm_data$sample_id <- factor(norm_data$sample_id, levels(norm_data$sample_id)[c("wt", "hla_KO", "3psm_KO", "d3PSM_empty", "d3PSM_alpha", "d3PSM_delta")])
+norm_data$sample_id <- factor(norm_data$sample_id, c("wt", "hla_KO", "3psm_KO", "d3PSM_empty", "d3PSM_alpha", "d3PSM_delta"))
 norm_data$timepoint <- plyr::mapvalues(norm_data$timepoint, c("72", "120"), c("72 hours", "120 hours"))
 
 
@@ -158,6 +158,10 @@ orddom_summary <- norm_data %>%
   map_at(orddom_cols[c(-1, -2, -3, -26,-31, -32)], as.numeric) %>%
   as.data.frame() %>%
   filter(Var2 == set_test)
+
+#test case for an issue: Error in combn(unique(sort(x[[test_factor1]])), 2) : n < m
+blocked_data <- split(norm_data, norm_data[[blocking_factor]], drop = TRUE)
+map(blocked_data, function(x) combn(unique(sort(x[[test_factor1]])), 2))
 
 #+ comparisons-label
 l5 <- expression(atop("wild-type vs. ", italic(paste("srtA", ":", ":", "erm"))))

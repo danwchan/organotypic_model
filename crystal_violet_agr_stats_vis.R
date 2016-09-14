@@ -206,7 +206,7 @@ l2 <- expression(italic(agrA[C123F]))
 l6 <- expression(atop(italic(agrA[C123F]), paste("+ pOS1 ", italic(agrA))))
 l7 <- expression(atop(italic(agrA[C123F]), "+ pOS1 empty"))
 facet1 <- data.frame(x = 1:4, y = 1:4) #for the overlay later to allow for drawing stats comparison paths
-norm_data$simple_id <- factor(norm_data$simple_id, levels(norm_data$simple_id)[c("wt_NA", "agrA_", "agrA_pos1_empty", "agrA_pos1_agrA_20")])
+norm_data$simple_id <- factor(norm_data$simple_id, c("wt_NA", "agrA_", "agrA_pos1_empty", "agrA_pos1_agrA_20"))
 comparisons <- list(c(1,1.9), c(1,3), c(1,4), c(3,4)) #state the comparisons
 
 #+ overview-plot, fig.width=7, fig.height=7

@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="8.5in"
+   height="4.5in"
+   viewBox="0 0 765 405"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Figure4.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.33"
+     inkscape:cx="586.7042"
+     inkscape:cy="272.69951"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1060"
+     inkscape:window-x="1918"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     units="in"
+     height="8in" />
+  <defs
+     id="defs4">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5644">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5646"
+         width="398.2301"
+         height="398.2301"
+         x="3880.4563"
+         y="2454.033" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5679">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect5681"
+         width="846.23895"
+         height="846.23895"
+         x="3011.5947"
+         y="2003.457" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12598">
+      <rect
+         y="2004.0328"
+         x="3884.0281"
+         height="398.2301"
+         width="398.2301"
+         id="rect12600"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath11683">
+      <rect
+         y="706.8186"
+         x="-2.6864812"
+         height="398.2301"
+         width="398.2301"
+         id="rect11685"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath11540">
+      <rect
+         y="1263.9614"
+         x="47.313568"
+         height="398.2301"
+         width="398.2301"
+         id="rect11542"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath11536">
+      <rect
+         y="702.67133"
+         x="-1221.548"
+         height="846.23895"
+         width="846.23895"
+         id="rect11538"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath10241">
+      <rect
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect10243"
+         width="846.23895"
+         height="846.23895"
+         x="-975.18585"
+         y="480.81158" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath10326">
+      <rect
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect10328"
+         width="398.2301"
+         height="398.2301"
+         x="-128.94699"
+         y="530.59039" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath10395">
+      <rect
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect10397"
+         width="398.2301"
+         height="398.2301"
+         x="-128.94699"
+         y="928.8205" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9834-0">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9836-8"
+         width="846.23895"
+         height="846.23895"
+         x="-975.18585"
+         y="480.81171" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9905-5">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9907-7"
+         width="398.2301"
+         height="398.2301"
+         x="-128.94699"
+         y="530.59052" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9974-4">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9976-7"
+         width="398.2301"
+         height="398.2301"
+         x="-128.94699"
+         y="928.82062" />
+    </clipPath>
+    <clipPath
+       id="clipPath8914"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="1054.0704"
+         x="4481.0093"
+         height="398.2301"
+         width="398.2301"
+         id="rect8916"
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       id="clipPath8836"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8838"
+         width="398.2301"
+         height="398.2301"
+         x="3624.771"
+         y="1054.0707" />
+    </clipPath>
+    <clipPath
+       id="clipPath8339"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8341"
+         width="398.2301"
+         height="398.2301"
+         x="4874.0142"
+         y="1362.5195" />
+    </clipPath>
+    <clipPath
+       id="clipPath8128"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="-321.13696"
+         x="3256.9465"
+         height="398.2301"
+         width="398.2301"
+         id="rect8130"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:1.76991153;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       id="clipPath8729"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8731"
+         width="846.23895"
+         height="846.23895"
+         x="2765.8965"
+         y="62.05125" />
+    </clipPath>
+    <clipPath
+       id="clipPath8659"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="60.170757"
+         x="1907.7771"
+         height="846.23895"
+         width="846.23895"
+         id="rect8661"
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       id="clipPath8414"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="382.7348"
+         x="3069.7429"
+         height="846.23895"
+         width="846.23895"
+         id="rect8416"
+         style="display:inline;opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       id="clipPath8198"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         style="opacity:1;fill:#780000;fill-opacity:0.20579714;fill-rule:nonzero;stroke:#000000;stroke-width:3.76106215;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8200"
+         width="846.23895"
+         height="846.23895"
+         x="2211.6235"
+         y="380.85434" />
+    </clipPath>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-647.3622)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:125px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="29.963451"
+       y="689.74548"
+       id="text4439"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4441"
+         x="29.963451"
+         y="689.74548"
+         style="font-size:25px">A</tspan></text>
+    <image
+       sodipodi:absref="/home/danwchan/Documents/Organotypic_model_analysis/Figures/crystal_violet_biofilm.tiff"
+       xlink:href="crystal_violet_biofilm.tiff"
+       width="264.81396"
+       height="264.81442"
+       preserveAspectRatio="none"
+       style="opacity:1;image-rendering:optimizeQuality"
+       id="image6395"
+       x="100.35369"
+       y="666.50909" />
+    <image
+       sodipodi:absref="/home/danwchan/Documents/Organotypic_model_analysis/Figures/crystal_violet_effsize.tiff"
+       xlink:href="crystal_violet_effsize.tiff"
+       width="341.75079"
+       height="113.90888"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image6346"
+       x="23.523287"
+       y="918.89435" />
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,8.4755861,604.55936)"
+       clip-path="url(#clipPath8198)"
+       width="1024.0001"
+       height="943.00012"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image8195"
+       x="2131.5762"
+       y="358.14047"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_wt_unwashed.png" />
+    <image
+       clip-path="url(#clipPath8414)"
+       width="1024.0001"
+       height="943.00012"
+       preserveAspectRatio="none"
+       style="display:inline;image-rendering:optimizeQuality"
+       id="image8405"
+       x="2902.6008"
+       y="353.77097"
+       transform="matrix(0.19053384,0,0,0.19053414,6.2119737,604.20105)"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_wt_washed.png" />
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,66.368622,828.80356)"
+       clip-path="url(#clipPath8659)"
+       width="1024.0001"
+       height="943.00012"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image8651"
+       x="1741.8966"
+       y="52.050556"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_agr_unwashed.png" />
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,64.10501,828.44524)"
+       clip-path="url(#clipPath8729)"
+       width="1024.0001"
+       height="943.00012"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image8725"
+       x="2711.4924"
+       y="48.086979"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_agr_washed.png" />
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,-105.33293,738.31282)"
+       clip-path="url(#clipPath8128)"
+       width="651.53772"
+       height="600.00006"
+       preserveAspectRatio="none"
+       style="display:inline;image-rendering:optimizeQuality"
+       id="image8117"
+       x="3254.512"
+       y="-480.85654"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_wt_unwashed2.png" />
+    <image
+       clip-path="url(#clipPath8339)"
+       width="651.53772"
+       height="600.00006"
+       preserveAspectRatio="none"
+       style="display:inline;image-rendering:optimizeQuality"
+       id="image8329"
+       x="4775.0752"
+       y="1261.4658"
+       transform="matrix(0.19053384,0,0,0.19053414,-252.56021,417.15996)"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_wt_washed2.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path6474-3-9"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.18677749;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       d="m 429.77127,1001.4126 0,-161.0509 -11.74202,0 0,161.0509 11.74202,0 z" />
+    <text
+       y="426.4205"
+       x="-934.79468"
+       id="text6476-8-7"
+       style="font-variant:normal;font-weight:normal;font-size:7.13972378px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(0,-1.0000017,0.99999832,0,0,0)">
+      <tspan
+         y="426.4205"
+         x="-934.79468"
+         id="tspan8585"
+         sodipodi:role="line">agrA<tspan
+   id="tspan8587"
+   style="font-size:4.64082098px;baseline-shift:sub">C123F</tspan>
+</tspan>
+    </text>
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,-175.41597,639.43173)"
+       clip-path="url(#clipPath8836)"
+       width="651.53772"
+       height="600.00006"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image8827"
+       x="3379.667"
+       y="1052.8671"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_agr_unwashed2.png" />
+    <image
+       transform="matrix(0.19053384,0,0,0.19053414,-177.67958,639.07342)"
+       clip-path="url(#clipPath8914)"
+       width="651.53772"
+       height="600.00006"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeQuality"
+       id="image8902"
+       x="4377.584"
+       y="1002.8669"
+       xlink:href="/home/danwchan/Documents/Organotypic_model_analysis/pictures/cv_agr_washed2.png" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path6474-3"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.18677749;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       d="m 429.7713,838.2695 0,-161.05093 -11.74203,0 0,161.05093 11.74203,0 z" />
+    <text
+       y="426.42056"
+       x="-771.65179"
+       id="text6476-8"
+       style="font-variant:normal;font-weight:normal;font-size:7.13972473px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(0,-1.0000016,0.99999842,0,0,0)">
+      <tspan
+         y="426.42056"
+         id="tspan6478-8"
+         sodipodi:role="line"
+         x="-771.65179">wildtype</tspan>
+    </text>
+    <path
+       d="m 429.98954,677.00034 160.9874,0 0,-10.36641 -160.9874,0 0,10.36641 z"
+       style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.24973132;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path4702-2-46"
+       inkscape:connector-curvature="0" />
+    <text
+       y="674.09851"
+       x="495.98495"
+       style="font-variant:normal;font-weight:normal;font-size:6.35099554px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text4704-9-3">
+      <tspan
+         x="495.98495"
+         sodipodi:role="line"
+         id="tspan4706-8-5"
+         y="674.09851">unwashed</tspan>
+    </text>
+    <path
+       d="m 590.8683,676.64203 160.98752,0 0,-10.3664 -160.98752,0 0,10.3664 z"
+       style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.24973132;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path4702-2-46-5"
+       inkscape:connector-curvature="0" />
+    <text
+       y="673.74023"
+       x="660.58594"
+       style="font-variant:normal;font-weight:normal;font-size:6.35099554px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text4704-9-3-8">
+      <tspan
+         x="660.58594"
+         sodipodi:role="line"
+         id="tspan4706-8-5-7"
+         y="673.74023">washed</tspan>
+    </text>
+    <rect
+       y="747.36072"
+       x="725.2215"
+       height="1.2009097"
+       width="16.671709"
+       id="rect5642-1-81-0"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="827.63434"
+       x="541.64685"
+       height="1.2009096"
+       width="39.367912"
+       id="rect5642-32"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="747.71899"
+       x="564.34308"
+       height="1.2009096"
+       width="16.671707"
+       id="rect5642-1-81"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="827.27606"
+       x="702.52539"
+       height="1.2009097"
+       width="39.367916"
+       id="rect5642-32-8"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="910.5036"
+       x="725.22156"
+       height="1.2009101"
+       width="16.671711"
+       id="rect5642-1-81-0-3"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="990.77838"
+       x="541.64691"
+       height="1.2009097"
+       width="39.367916"
+       id="rect5642-32-7"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="910.86188"
+       x="564.34314"
+       height="1.2009097"
+       width="16.671709"
+       id="rect5642-1-81-5"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       y="990.42004"
+       x="702.52545"
+       height="1.20091"
+       width="39.36792"
+       id="rect5642-32-8-6"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:125px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="389.31152"
+       y="689.74542"
+       id="text4439-5"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4441-0"
+         x="389.31152"
+         y="689.74542"
+         style="font-size:25px">B</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="8.5in"
+   height="5in"
+   viewBox="0 0 765 450"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Supplement_figure2.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.78"
+     inkscape:cx="115.64102"
+     inkscape:cy="220.09157"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1060"
+     inkscape:window-x="1918"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     units="in"
+     height="5in" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-602.3622)">
+    <g
+       id="g6249"
+       transform="matrix(0.26341682,0,0,0.26341682,322.43131,694.08079)">
+      <image
+         width="584.66876"
+         height="538.42047"
+         id="image3160"
+         x="-917.57495"
+         y="258.63141"
+         xlink:href="../pictures/TS_D2_WT1_cropped.png"
+         sodipodi:absref="../pictures/TS_D2_WT1_cropped.png" />
+      <image
+         width="584.66876"
+         height="538.42047"
+         id="image3222"
+         x="-326.51682"
+         y="258.63141"
+         xlink:href="../pictures/TS_D2_WT2_cropped.png"
+         sodipodi:absref="../pictures/TS_D2_WT2_cropped.png" />
+      <path
+         d="m -437.17217,311.22305 214.92148,0 0,-51.96276 -214.92148,0 0,51.96276 z"
+         style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.64602351;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path4702-2"
+         inkscape:connector-curvature="0" />
+      <text
+         y="296.54089"
+         x="-390.86047"
+         style="font-variant:normal;font-weight:normal;font-size:31.48773575px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text4704-9">
+        <tspan
+           x="-390.86047 -373.35342 -355.84607 -347.09238 -329.5853 -312.07825 -294.57089 -284.08557"
+           y="296.54089"
+           sodipodi:role="line"
+           id="tspan4706-8">24 hours</tspan>
+      </text>
+    </g>
+    <g
+       id="g6256"
+       transform="matrix(0.26341682,0,0,0.26341682,640.48038,552.25173)">
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4750"
+         x="-917.57495"
+         y="797.052"
+         xlink:href="../pictures/TS_D3_WT1_cropped.png"
+         sodipodi:absref="../pictures/TS_D3_WT1_cropped.png" />
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4812"
+         x="-326.51682"
+         y="797.052"
+         xlink:href="../pictures/TS_D3_WT2_cropped.png"
+         sodipodi:absref="../pictures/TS_D3_WT2_cropped.png" />
+      <path
+         d="m -437.17217,849.57941 214.92148,0 0,-51.96276 -214.92148,0 0,51.96276 z"
+         style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.64602351;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path4702-2-8"
+         inkscape:connector-curvature="0" />
+      <text
+         y="834.89734"
+         x="-391.10513"
+         style="font-variant:normal;font-weight:normal;font-size:31.48773575px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text4704-9-0">
+        <tspan
+           x="-391.10513"
+           sodipodi:role="line"
+           id="tspan4706-8-0"
+           y="834.89734">72 hours</tspan>
+      </text>
+    </g>
+    <g
+       id="g6263"
+       transform="matrix(0.26341682,0,0,0.26341682,322.43131,552.25173)">
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4874"
+         x="-917.57495"
+         y="1335.4725"
+         xlink:href="../pictures/TS_D5_WT1_cropped.png"
+         sodipodi:absref="../pictures/TS_D5_WT1_cropped.png" />
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4936"
+         x="-326.51682"
+         y="1335.4725"
+         xlink:href="../pictures/TS_D5_WT2_cropped.png"
+         sodipodi:absref="../pictures/TS_D5_WT2_cropped.png" />
+      <path
+         d="m -437.17217,1387.9359 214.92148,0 0,-51.9628 -214.92148,0 0,51.9628 z"
+         style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.64602351;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path4702-2-4"
+         inkscape:connector-curvature="0" />
+      <text
+         y="1373.2537"
+         x="-400.75034"
+         style="font-variant:normal;font-weight:normal;font-size:31.48773575px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text4704-9-4">
+        <tspan
+           sodipodi:role="line"
+           id="tspan4706-8-3"
+           x="-400.75034"
+           y="1373.2537">120 hours</tspan>
+      </text>
+    </g>
+    <g
+       id="g6242"
+       transform="matrix(0.26341682,0,0,0.26341682,638.79731,694.08078)">
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4388"
+         x="-917.57495"
+         y="-279.78912"
+         xlink:href="../pictures/TS_T10_WT1_cropped.png"
+         sodipodi:absref="../pictures/TS_T10_WT1_cropped.png" />
+      <image
+         width="584.66876"
+         height="538.42053"
+         id="image4626"
+         x="-326.51682"
+         y="-279.78912"
+         xlink:href="../pictures/TS_T10_WT2_cropped.png"
+         sodipodi:absref="../pictures/TS_T10_WT2_cropped.png" />
+      <path
+         d="m -437.17217,-227.13353 214.92148,0 0,-51.96272 -214.92148,0 0,51.96272 z"
+         style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.64602351;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path4702-2-5"
+         inkscape:connector-curvature="0" />
+      <text
+         y="-241.81563"
+         x="-391.98682"
+         style="font-variant:normal;font-weight:normal;font-size:31.48773575px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text4704-9-8">
+        <tspan
+           y="-241.81563"
+           x="-391.98682"
+           sodipodi:role="line"
+           id="tspan4706-8-8">10 hours</tspan>
+      </text>
+    </g>
+    <g
+       id="g6235"
+       transform="matrix(0.24883718,0,0,0.24883718,-228.43489,972.42361)">
+      <image
+         width="618.92517"
+         height="569.96716"
+         id="image3424"
+         x="1242.425"
+         y="-1414.7563"
+         xlink:href="../pictures/TS_T2_WT1_cropped.png"
+         sodipodi:absref="../pictures/TS_T2_WT1_cropped.png" />
+      <image
+         width="618.92517"
+         height="569.96722"
+         id="image4232"
+         x="1868.1139"
+         y="-1414.7563"
+         xlink:href="../pictures/TS_T2_WT2_cropped.png"
+         sodipodi:absref="../pictures/TS_T2_WT2_cropped.png" />
+      <path
+         d="m 1750.9752,-1358.9477 227.514,0 0,-55.0072 -227.514,0 0,55.0072 z"
+         style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#7f7f7f;stroke-width:0.68387479;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path4702-2-46"
+         inkscape:connector-curvature="0" />
+      <text
+         y="-1374.49"
+         x="1809.2185"
+         style="font-variant:normal;font-weight:normal;font-size:33.33263779px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text4704-9-3">
+        <tspan
+           x="1809.2185"
+           sodipodi:role="line"
+           id="tspan4706-8-5"
+           y="-1374.49">2 hours</tspan>
+      </text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:125px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="31.198666"
+       y="638.60468"
+       id="text4439"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4441"
+         x="31.198666"
+         y="638.60468"
+         style="font-size:25px">A</tspan></text>
+  </g>
+</svg>

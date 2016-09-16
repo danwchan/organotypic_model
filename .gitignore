@@ -7,7 +7,7 @@
 *.o
 *.so
 #these are usually large paper files or figures
-/Figures
+*.tiff
 *.pdf
 
 # Packages #

@@ -35,7 +35,8 @@
 .Rhistory
 .Makefile*
 
-# Data (to be commented out when the release is made) #
+# Data (to be commented out when the release is made, pictures will be uploaded to a non-git repository) #
 #######################################################
+/pictures
 /Data
 *.html

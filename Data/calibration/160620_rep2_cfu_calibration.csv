@@ -1,0 +1,75 @@
+#"experimental notes: first set of rafts after coming back from NYC, noticed that the J23T3's were escaping the bottom of the plugs at around D10 post lift (harvest D0) they were in two populations at the bottom of the wells"
+#"incubation tempurature in C: 37"
+#"NKEK stock: 160323, P3 frozen"
+#"J23T3 stock: 160520"
+#"days post lift: 10"
+#"date: primary key indicating day rafts were started"
+#"notes: comment about the data point; agar denotes TSB plated tests (3uL); *_stock denotes the resuspended bacteria after washing; *_d denotes the final dilution used to treat rafts (10^-4); OD660_x:y denotes the harvest OD x and the diluted OD y; double denotes that two drops mixed on the raft; infected denotes yellowing of the media"
+#"timepoint: hours elapsed from T0 before sample was taken"
+#"sample_strain: strain or species of bacteria"
+#"sample_id: other identifcation of bacteria"
+#"count: number of colonies counted in a 10uL plated drop"
+#"dilution: x10 fold dilution 20uL in 180uL; if blank denotes 3uL drop representing total exposure amount"
+date,notes,timepoint,sample_strain,sample_id,count,dilution
+#"model for reference 160620,agar_stock_d,0,NM,wt,14,1"
+#"160620,OD660_0.428:0.42,,LAC,wt,,"
+#"160620,,72,22251,agrA_comp,6,5"
+160620,OD660_0.428:0.42,,LAC,wt,,
+160620,agar_stock_d,0,LAC,dil1,8,1
+160620,agar_stock_d,0,LAC,dil1,9,1
+160620,agar_stock_d,0,LAC,dil2,7,2
+160620,agar_stock_d,0,LAC,dil2,9,2
+160620,agar_stock_d,0,LAC,dil3,5,3
+160620,agar_stock_d,0,LAC,dil3,9,3
+160620,agar,0,LAC,dil1,41,
+160620,agar,0,LAC,dil1,24,
+160620,agar,0,LAC,dil1,15,
+160620,agar,0,LAC,dil1,30,
+160620,double,0,LAC,dil1,26,0
+160620,double,0,LAC,dil1,7,0
+160620,,0,LAC,dil1,29,0
+160620,,0,LAC,dil1,76,0
+160620,double,0,LAC,dil2,49,0.69897
+160620,double,0,LAC,dil2,80,0.69897
+160620,,0,LAC,dil2,103,0.69897
+160620,,0,LAC,dil2,72,0.69897
+160620,,0,LAC,dil3,342,1
+160620,double,0,LAC,dil3,1106,1
+160620,double,0,LAC,dil3,1616,1
+160620,,0,LAC,dil3,392,1
+160620,,24,LAC,dil1,44,4
+160620,,24,LAC,dil1,21,4
+160620,,24,LAC,dil1,38,4
+160620,,24,LAC,dil1,19,4
+160620,,24,LAC,dil2,8,5
+160620,,24,LAC,dil2,6,5
+160620,,24,LAC,dil2,6,5
+160620,infected,24,LAC,dil2,35,5
+160620,infected,24,LAC,dil2,26,5
+160620,,24,LAC,dil3,54,4
+160620,,24,LAC,dil3,40,4
+160620,,24,LAC,dil3,50,4
+160620,infected_double,24,LAC,dil3,20,5
+160620,infected_double,24,LAC,dil3,40,5
+160620,infected,24,LAC,dil3,8,5
+160620,infected,24,LAC,dil3,13,5
+160620,infected,24,LAC,dil3,30,5
+160620,,72,LAC,dil1,22,5
+160620,,72,LAC,dil1,18,5
+160620,,72,LAC,dil1,13,5
+160620,,72,LAC,dil1,13,5
+160620,infected,72,LAC,dil1,3,6
+160620,,72,LAC,dil2,19,5
+160620,,72,LAC,dil2,26,5
+160620,,72,LAC,dil2,26,5
+160620,infected_double,72,LAC,dil2,6,6
+160620,infected,72,LAC,dil2,6,6
+160620,infected,72,LAC,dil2,3,6
+160620,infected,72,LAC,dil2,12,6
+160620,,72,LAC,dil3,14,5
+160620,infected,72,LAC,dil3,8,6
+160620,infected,72,LAC,dil3,8,6
+160620,infected_double,72,LAC,dil3,12,6
+160620,,120,LAC,dil1,32,5
+160620,,120,LAC,dil1,14,5
+160620,,120,LAC,dil1,44,5

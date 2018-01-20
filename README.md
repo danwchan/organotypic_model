@@ -2,7 +2,7 @@
 
 Reproducible workflow used to process and analyze the data associated with the working paper entitled: Staphylococcal Smooth Biofilm Morphology on Organotypic Human Keratinocyte Culture is Dependent on agrA.
 
-The data for this project will be made available upon publication. This repo is currently linked to an OSF project.
+The data for this project will be made available upon publication. This repo is currently linked to an [OSF project](https://osf.io/gmxye).
 
 # File structure
 

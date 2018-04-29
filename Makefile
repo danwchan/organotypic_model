@@ -1,4 +1,4 @@
-TEXFILE = second_draft
+TEXFILE = Chan_Wardenburg_Staphylococcal_Smooth_Biofilm
 
 #this the the rendered and knit R script to html for browsing intermediate figures and looking at analysis decisions
 
@@ -126,8 +126,8 @@ suppfigs: Figures/figS1.pdf Figures/figS2.pdf Figures/figS3.pdf Figures/figS4.pd
 	touch $@;
 
 $(TEXFILE).pdf: $(TEXFILE).tex
-	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	lualatex -interaction nonstopmode -file-line-error $(TEXFILE).tex;
 	bibtex $(TEXFILE).aux;
-	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
-	pdflatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	lualatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
+	lualatex -interaction nonstopmode -halt-on-error -file-line-error $(TEXFILE).tex;
 	rm -v $(TEXFILE).blg $(TEXFILE).out $(TEXFILE).aux $(TEXFILE).bbl $(TEXFILE).log
